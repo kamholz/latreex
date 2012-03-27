@@ -14,7 +14,20 @@ append js
       });
     
       $('#latex').click(function () { downloadFile('tex') });
-      $('#pdf').click(function () { downloadFile('pdf') });        
+      $('#pdf').click(function () { downloadFile('pdf') });
+      
+      $('#template').click(function () {
+        var json = prompt("Paste the indicated line from the LaTeX source:");
+        if (!json) return;
+        json = $.parseJSON(json.trim().replace(/^%\s*/,''));
+        
+        var form = $('#form');
+        for (var i in json) {
+          var elt = form.find('[name='+i+']');
+          if (elt.size() > 1) elt.val([json[i]]);
+          else elt.val(json[i]);
+        }
+      });      
     });
     
     function downloadFile(ext) {
@@ -33,62 +46,62 @@ block body
         ul
           li
             label.left Space between sibling nodes:
-            input(type='text',name='treesep',tabindex=2,value='4ex',size=6,maxlength=6)
+            input(type='text',name='treesep',tabindex=1,value='4ex',size=6,maxlength=6)
           li
             label.left Parent to daughter length:
-            input(type='text',name='levelsep',tabindex=3,value='2cm',size=6,maxlength=6)
+            input(type='text',name='levelsep',tabindex=2,value='2cm',size=6,maxlength=6)
           li
             label.left Maximum label width:
-            input(type='text',name='LFTwidth',tabindex=4,value='15ex',size=6,maxlength=6)
+            input(type='text',name='LFTwidth',tabindex=3,value='15ex',size=6,maxlength=6)
           li
             label.left Cushion aroubnd labels:
-            input(type='text',name='LFTsep',tabindex=5,value='4pt',size=6,maxlength=6)
+            input(type='text',name='LFTsep',tabindex=4,value='4pt',size=6,maxlength=6)
           li
             label.left Line thickness:
-            input(type='text',name='linewidth',tabindex=6,value='0.3pt',size=6,maxlength=6)
+            input(type='text',name='linewidth',tabindex=5,value='0.3pt',size=6,maxlength=6)
 
       .rowform.left
         ul
           li Style:
           li
-            input#style_flat(type='radio',name='style',value='flat',tabindex=7)
+            input#style_flat(type='radio',name='style',value='flat',tabindex=6)
             label(for='style_flat') Flat
           li  
-            input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=8)
+            input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=7)
             label(for='style_nonflat') Nonflat
 
       .rowform.left
         ul
           li Direction:
           li
-            input#orient_D(type='radio',name='orient',value='D',checked='checked',tabindex=12)
+            input#orient_D(type='radio',name='orient',value='D',checked='checked',tabindex=8)
             label(for='orient_D') Top to bottom
           li
-            input#orient_R(type='radio',name='orient',value='R',tabindex=13)
+            input#orient_R(type='radio',name='orient',value='R',tabindex=9)
             label(for='orient_R') Left to right
           li
-            input#orient_L(type='radio',name='orient',value='L',tabindex=14)
+            input#orient_L(type='radio',name='orient',value='L',tabindex=10)
             label(for='orient_L') Right to left
           li
-            input#orient_U(type='radio',name='orient',value='U',tabindex=15)
+            input#orient_U(type='radio',name='orient',value='U',tabindex=11)
             label(for='orient_U') Bottom to top
 
       .rowform.left
         ul
           li Font:
           li
-            input#font_sf(type='radio',name='font',value='sf',checked='checked',tabindex=9)
+            input#font_sf(type='radio',name='font',value='sf',checked='checked',tabindex=12)
             label(for='font_sf') Helvetica
           li
-            input#font_rm(type='radio',name='font',value='rm',tabindex=10)
+            input#font_rm(type='radio',name='font',value='rm',tabindex=13)
             label(for='font_rm') Times
           li
-            input#font_tt(type='radio',name='font',value='tt',tabindex=11)
+            input#font_tt(type='radio',name='font',value='tt',tabindex=14)
             label(for='font_tt') Courier
 
     .left
       p Enter tree:
-      textarea(name="tree",tabindex=1,rows=18,cols=40)
+      textarea(name="tree",tabindex=15,rows=18,cols=40)
         | Proto-Indo-European~
         | -Balto-Slavic~
         | --Baltic
@@ -112,5 +125,6 @@ block body
     button#preview Preview Tree
     button#latex Download LaTeX source
     button#pdf Download PDF
+    button#template Template
   
   #previewImage

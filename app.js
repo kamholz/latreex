@@ -97,8 +97,10 @@ function makeLatex(req, res, next) {
     for (var i in paramDefaults) {
         if (!p[i]) p[i] = paramDefaults[i];
     }
-    p.refpoint = orientToRefpoint[p.orient];    
     
+    p.json = JSON.stringify(p, Object.keys(p).sort());
+        
+    p.refpoint = orientToRefpoint[p.orient];    
     p.tree = parseTree(p.tree.split(/\r\n/))[0];
     p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };
     p.roman = function(dec) { return roman(dec).toLowerCase() };
@@ -143,13 +145,11 @@ function parseTree(lines, lineNum, depth) {
         var captures = /^(-*)\s*(.+)$/.exec(lines[i]);
         if (!captures) continue; // blank or malformed line
 
-        var newDepth = captures[1].length,
-            value = captures[2];
-        
+        var newDepth = captures[1].length;
         if (depth === undefined) depth = newDepth; // set starting depth if we weren't given one
 
         if (newDepth < depth) break;
-        else if (newDepth === depth) tree.push({ value: value, children: [], height: 1 });
+        else if (newDepth === depth) tree.push({ value: captures[2], children: [], height: 1 });
         else {
             var subtree = parseTree(lines, i, newDepth);
             var lastNode = tree[tree.length - 1];

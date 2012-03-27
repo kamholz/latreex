@@ -2,23 +2,24 @@ extends base
 
 append js
   script(type='text/javascript')
+    var basepath = '#{basepath}';
     $(document).ready(function () {
       $('#preview').click(function () {
         var div = $('#previewImage');
         div.html('Loading preview...');
-        $.post('/png', $('#form').serializeArray(), function (data) {
+        $.post(basepath+'png', $('#form').serializeArray(), function (data) {
           div.html('');
-          div.append($("<img />").attr('src', '/png/'+data.name));
+          div.append($("<img />").attr('src', basepath+'png/'+data.name));
         });
       });
     
       $('#latex').click(function () { downloadFile('tex') });
       $('#pdf').click(function () { downloadFile('pdf') });        
     });
-
+    
     function downloadFile(ext) {
-      $.post('/'+ext, $('#form').serializeArray(), function (data) {
-        window.location.pathname = '/'+ext+'/'+data.name;
+      $.post(basepath+ext, $('#form').serializeArray(), function (data) {
+        window.location.pathname = basepath+ext+'/'+data.name;
       });
     }
 

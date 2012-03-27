@@ -36,10 +36,16 @@ app.configure(function(){
 
 app.configure('development', function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    app.set('basepath', '/');
 });
 
 app.configure('production', function(){
     app.use(express.errorHandler());
+    app.set('basepath', '/latreex/');
+});
+
+app.helpers({
+    basepath: app.set('basepath')
 });
 
 app.get('/', index);

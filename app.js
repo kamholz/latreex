@@ -5,7 +5,7 @@ var express = require('express'),
     execFile = require('child_process').execFile,
     uuid = require('node-uuid');
 
-var latexTemplate = fs.readFileSync('latex.ejs', 'utf8');
+var latexTemplate = fs.readFileSync(__dirname + '/latex.ejs', 'utf8');
 var treeDir = 'trees';
 
 var app = module.exports = express.createServer();

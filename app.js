@@ -6,7 +6,7 @@ var express = require('express'),
     uuid = require('node-uuid');
 
 var latexTemplate = fs.readFileSync(__dirname + '/latex.ejs', 'utf8');
-var treeDir = 'trees';
+var treeDir = __dirname + '/trees';
 
 var app = module.exports = express.createServer();
 

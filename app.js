@@ -49,12 +49,12 @@ app.helpers({
 });
 
 app.get('/', index);
-app.post('/tex', makeLatex, returnName);
-app.post('/pdf', makeLatex, makeFile('pdf'), returnName);
-app.post('/png', makeLatex, makeFile('png'), returnName);
-app.get('/tex/:name', getFile('tex','text/plain',true));
-app.get('/pdf/:name', getFile('pdf','application/pdf',true));
-app.get('/png/:name', getFile('png','image/png',false));
+app.post('/tex', makeLatex, returnInfo);
+app.post('/pdf', makeLatex, makeFile('pdf'), returnInfo);
+app.post('/png', makeLatex, makeFile('png'), returnInfo);
+app.get('/tex/:id/:name', getFile('tex','text/plain'));
+app.get('/pdf/:id/:name', getFile('pdf','application/pdf'));
+app.get('/png/:id', getFile('png','image/png'));
 
 app.listen(3001);
 console.log("Express server listening on port %d in %s mode", 3001, app.settings.env);
@@ -104,11 +104,13 @@ function makeLatex(req, res, next) {
     p.roman = function(dec) { return roman(dec).toLowerCase() };
     
     req.file = uuid.v4();
+    req.treeName = getTreeName(p.tree.value);
+    
     fs.writeFile(treeDir+'/'+req.file+'.tex', ejs.render(latexTemplate, p), 'utf8', next);
 }
 
-function returnName(req, res, next) {
-    res.json({ name: req.file });
+function returnInfo(req, res, next) {
+    res.json({ id: req.file, name: req.treeName });
 }
 
 function makeFile(ext) {
@@ -120,14 +122,14 @@ function makeFile(ext) {
     }
 }
 
-function getFile(ext, mime, attach) {
+function getFile(ext, mime) {
     return function(req, res, next) {
-        var name = req.params.name;
-        if (!name) return res.send(409);
-        fs.readFile(treeDir+'/'+name+'.'+ext, function (err, data) {
+        var id = req.params.id;
+        if (!id) return res.send(409);
+        fs.readFile(treeDir+'/'+id+'.'+ext, function (err, data) {
            if (err) return res.send(409);
            res.contentType(mime);
-           if (attach) res.attachment(name + '.' + ext);            
+           if (req.params.name) res.attachment(req.params.name + '.' + ext);
            res.send(data);
         });
     }
@@ -202,6 +204,12 @@ function pstNode(p, treeNode, depth) {
 
 function escapeLatex(txt) {
     return txt.replace(/([&$%#_])/g, "\\$1");
+}
+
+function getTreeName(txt) {
+    txt = txt.replace(/~?\^*$/,'').replace(/^\./,'').replace(/[:\\\/]/g,'').trim();
+    if (txt === '') txt = 'tree-unnamed';
+    return txt;
 }
 
 var D = [1,5,10,50,100,500,1000], 

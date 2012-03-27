@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{times,varwidth,pst-tree,pst-eps}
+\pagestyle{empty}
+\psset{showbbox=false,treemode=<%- orient %>,linewidth=<%- linewidth %>,treesep=<%- treesep %>,levelsep=<%- levelsep %>}
+\newcommand{\LFTw}[2]{%
+\Tr[ref=#1]{\psframebox[linestyle=none,framesep=<%- LFTsep %>]{%
+\begin{varwidth}{<%- LFTwidth %>}\center #2\end{varwidth}}}}
+\newcommand{\LFTr}[2]{\Tr[ref=#1]{\psframebox[linestyle=none,framesep=<%- LFTsep %>]{#2}}}
+
+<% for (var i = 1; i < tree.height; i++) { -%>
+\def\pstreehook<%- roman(2*i - 1) %>{\psset{thislevelsep=*0pt}}
+<% } -%>
+
+\begin{document}\begin{TeXtoEPS}
+\small\<%- font %>
+\psframebox[linestyle=none,framesep=10pt]{%
+<%- pstTree() %>}
+\end{TeXtoEPS}\end{document}

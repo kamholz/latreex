@@ -1,5 +1,14 @@
 @import 'reset.css'
 
+border-radius()
+  -webkit-border-radius arguments
+  -moz-border-radius arguments
+  border-radius arguments
+
+opacity(n)
+  opacity n
+  filter unquote('progid:DXImageTransform.Microsoft.Alpha(Opacity=' + round(n * 100) + ')')
+
 body
   font-size 13pt
   font-family sans-serif
@@ -11,6 +20,9 @@ h1
   font-weight bold
   font-size 120%
 
+i
+  font-style italic
+
 .clearfix
   clear both
 
@@ -19,6 +31,24 @@ h1
 
 .right
   float right
+
+.tooltip
+  margin-left 1ex
+  position relative
+  top 2px
+  &:hover
+    cursor pointer
+
+#tooltip {
+	position absolute
+	z-index 9999
+	border-radius(8px)
+	background-color #555
+	color lightgreen
+	padding 10px
+	font-size 85%
+	line-height 1.25
+}
 
 .rowform
   ul
@@ -30,8 +60,10 @@ h1
     display inline-block
     text-align right
     margin-right 1ex
-  label.left
+  label.wide
     width 14em
+  input[type='radio']
+    margin-right 1ex
 
 textarea
   font-family monospace

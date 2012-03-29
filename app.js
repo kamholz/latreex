@@ -203,7 +203,7 @@ function pstNode(p, treeNode, depth) {
 }
 
 function escapeLatex(txt) {
-    return txt.replace(/([&$%#_])/g, "\\$1");
+    return txt.replace(/\\/g,"\\textbackslash").replace(/~/g,"\\textasciitild").replace(/([&$%#_{}])/g, "\\$1");
 }
 
 function getTreeName(txt) {

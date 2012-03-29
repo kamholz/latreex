@@ -61,7 +61,7 @@ console.log("Express server listening on port %d in %s mode", 3001, app.settings
 
 var paramDefaults = {
     linewidth: '0.3pt',
-    treesep: '5ex',
+    treesep: '4ex',
     levelsep: '2cm',
     LFTwidth: '15ex',
     LFTsep: '4pt',

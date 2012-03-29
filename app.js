@@ -75,6 +75,9 @@ var paramValidate = {
     font: /^(rm|sf|tt)$/,
     style: /^(flat|nonflat)$/
 };
+['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
+    paramValidate[p] = /^[0-9.]+(in|mm|cm|pt|em|ex|pc|bp|dd|cc|sp)$/;
+});
 
 var orientToRefpoint = {
     D: 't',

@@ -166,13 +166,13 @@ function parseTree(lines, lineNum, depth) {
 function pstNode(p, treeNode, depth) {
     var str = '';
     var node, afternode;
-    var captures = /^(\.?)(.*?)(~?)(\^*)$/.exec(escapeLatex(treeNode.value));
+    var captures = /^(\.?)(.*?)(~?)(\^*)$/.exec(treeNode.value);
     
     if (captures[1] != '' || captures[2] == '') {
         node = "\\Tn";
         afternode = "\\Tp";
     } else {
-        node = captures[3] != '' ? "\\LFTr{"+p.refpoint+"}{"+captures[2]+"}" : "\\LFTw{"+p.refpoint+"}{"+captures[2]+"}";
+        node = (captures[3] != '' ? '\\LFTr' : '\\LFTw') + "{"+p.refpoint+"}{"+escapeLatex(captures[2])+"}";
         afternode = "\\Tp[edge=none]";
     }
     
@@ -187,23 +187,22 @@ function pstNode(p, treeNode, depth) {
         if (skip < 0) skip = 0;
     }
     
-    if (skip > 0) str += "\\skiplevels{" + skip*2 + "} ";
+    if (skip > 0) str += "\\skiplevels{"+skip*2+"} ";
     
-    var childNum = treeNode.children.length;
-    if (childNum > 0) {
+    if (treeNode.children.length) {
         str += "\\pstree{"+node+"}{\\pstree{"+afternode+"}{%";
-        for (i = 0; i < childNum; i++) str += pstNode(p, treeNode.children[i], depth+skip+1);
+        treeNode.children.forEach(function (x) { str += pstNode(p, x, depth+skip+1) });
         str += "}}";
     }
     else str += node;
     
     if (skip > 0) str += " \\endskiplevels";
-    
+
     return str;
 }
 
 function escapeLatex(txt) {
-    return txt.replace(/\\/g,"\\textbackslash").replace(/~/g,"\\textasciitild").replace(/([&$%#_{}])/g, "\\$1");
+    return txt.replace(/\\/g,'\\textbackslash{}').replace(/~/g,'\\textasciitilde{}').replace(/[&$%#]/g,'\\$1');
 }
 
 function getTreeName(txt) {

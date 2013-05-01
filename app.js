@@ -133,8 +133,8 @@ function getFile(ext, mime) {
         if (!id) return res.send(409);
         fs.readFile(treeDir+'/'+id+'.'+ext, function (err, data) {
            if (err) return res.send(409);
+           res.attachment();
            res.contentType(mime);
-           if (req.params.name) res.attachment(req.params.name + '.' + ext);
            res.send(data);
         });
     }

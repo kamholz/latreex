@@ -37,7 +37,7 @@ append js
     
     function downloadFile(ext) {
       $.post(basepath+ext, $('#form').serializeArray(), function (data) {
-        window.location.pathname = basepath+ext+'/'+data.id+'/'+data.name;
+        window.location.pathname = basepath+ext+'/'+data.id+'/'+data.name+'.'+ext;
       });
     }
 

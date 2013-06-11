@@ -1,50 +1,46 @@
-var express = require('express'),
-    stylus = require('stylus'),
-    ejs = require('ejs'),
-    fs = require('fs'),
-    execFile = require('child_process').execFile,
-    uuid = require('node-uuid');
+var express = require('express');
+var stylus = require('stylus');
+var ejs = require('ejs');
+var fs = require('fs');
+var execFile = require('child_process').execFile;
+var uuid = require('node-uuid');
 
 var latexTemplate = fs.readFileSync(__dirname + '/latex.ejs', 'utf8');
 var treeDir = __dirname + '/trees';
 
-var app = module.exports = express.createServer();
+var app = express();
 
-app.configure(function(){
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.set('view options', { layout: false });
-    
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.set('view options', { layout: false });
 
-    app.use(express.logger(':remote-addr - [:date] ":method :url" :status'));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
 
-    app.use(stylus.middleware({
-        compile: function(str, path) {
-            return stylus(str)
-                .set('filename', path)
-                .set('include css', true)
-                .set('compress', true)
-        },
-        src: __dirname + '/public'
-    }));
+app.use(express.logger(':remote-addr - [:date] ":method :url" :status'));
 
-    app.use(app.router);
-    app.use(express.static(__dirname + '/public'));
-});
+app.use(stylus.middleware({
+    compile: function(str, path) {
+        return stylus(str)
+            .set('filename', path)
+            .set('include css', true)
+            .set('compress', true)
+    },
+    src: __dirname + '/public'
+}));
 
-app.configure('development', function(){
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-    app.set('basepath', '/');
-});
+app.use(app.router);
+app.use(express.static(__dirname + '/public'));
 
-app.configure('production', function(){
-    app.use(express.errorHandler());
-    app.set('basepath', '/latreex/');
-});
+if (app.get('environment') === 'production') {
+  app.use(express.errorHandler());
+  app.set('basepath', '/latreex/');  
+} else {
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.set('basepath', '/');  
+}
 
-app.helpers({
+app.locals({
     basepath: app.set('basepath')
 });
 

@@ -11,7 +11,7 @@
     "url": ""
   },
   "dependencies": {
-    "ejs": "0.7.x",
+    "ejs": "~0.8.4",
     "express": "~3.2.6",
     "jade": "~0.31.2",
     "node-uuid": "~1.4.0",

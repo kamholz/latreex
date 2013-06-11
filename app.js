@@ -32,7 +32,7 @@ app.use(stylus.middleware({
 app.use(app.router);
 app.use(express.static(__dirname + '/public'));
 
-if (app.get('environment') === 'production') {
+if (app.get('env') === 'production') {
   app.use(express.errorHandler());
   app.set('basepath', '/latreex/');  
 } else {

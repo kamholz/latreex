@@ -116,7 +116,7 @@ function returnInfo(req, res, next) {
 
 function makeFile(ext) {
     return function(req, res, next) {
-        execFile(__dirname + '/make'+ext+'.sh', [treeDir,req.file], function (code) {
+        execFile(__dirname + '/script/make'+ext+'.sh', [treeDir,req.file], function (code) {
             if (code) return res.send(409);
             next();
         });

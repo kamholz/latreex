@@ -52,15 +52,15 @@ block body
           li
             label.wide Space between sibling nodes:
             input(type='text',name='treesep',tabindex=1,value='4ex',size=6,maxlength=6)
-            img.tooltip(src='#{basepath}images/question.png',title='Space between daughters of the same parent, e.g., &lt;i&gt;Baltic&lt;/i&gt; and &lt;i&gt;Slavic&lt;/i&gt;')
+            img.tooltip(src='#{basepath}images/question.png',title='Space between daughters of the same parent, e.g., <i>Baltic</i> and <i>Slavic</i>')
           li
             label.wide Parent to daughter length:
             input(type='text',name='levelsep',tabindex=2,value='2cm',size=6,maxlength=6)
-            img.tooltip(src='#{basepath}images/question.png',title='Length between parents and daughters, e.g., &lt;i&gt;Balto-Slavic&lt;/i&gt; and &lt;i&gt;Baltic&lt;/i&gt;')
+            img.tooltip(src='#{basepath}images/question.png',title='Length between parents and daughters, e.g., <i>Balto-Slavic</i> and <i>Baltic</i>')
           li
             label.wide Maximum node label width:
             input(type='text',name='LFTwidth',tabindex=3,value='15ex',size=6,maxlength=6)
-            img.tooltip(src='#{basepath}images/question.png',title='Maximum width of node labels (language/family names) before wrapping to another line&lt;br&gt;(can be overridden for an individual label by appending &lt;i&gt;~&lt;/i&gt; to it)')
+            img.tooltip(src='#{basepath}images/question.png',title='Maximum width of node labels (language/family names) before wrapping to another line<br>(can be overridden for an individual label by appending <i>~</i> to it)')
           li
             label.wide Node label padding:
             input(type='text',name='LFTsep',tabindex=4,value='4pt',size=6,maxlength=6)
@@ -73,7 +73,7 @@ block body
       .rowform.left
         ul
           li Style:
-            img.tooltip(src='#{basepath}images/question.png',title='In non-flat trees, parent and daughter nodes are always the same distance apart.&lt;br&gt;In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other.&lt;br&gt;The flat style is generally only practical for smaller trees.')
+            img.tooltip(src='#{basepath}images/question.png',title='In non-flat trees, parent and daughter nodes are always the same distance apart.<br>In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other.<br>The flat style is generally only practical for smaller trees.')
           li  
             input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=7)
             label(for='style_nonflat') Non-flat
@@ -112,7 +112,7 @@ block body
 
     .left
       p Enter tree:
-        img.tooltip(src='#{basepath}images/question.png',title='Enter one node (language or family name) per line.&lt;br&gt;The first line contains the root node; subsequent lines contain child nodes.&lt;br&gt;Embedding is indicated with the appropriate number of dashes (-).&lt;br&gt;For an unlabeled node, use a dot (.).&lt;br&gt;To force a label not to wrap across lines, append &lt;i&gt;~&lt;/i&gt;.&lt;br&gt;To push a node up on a flat-style tree, append one &lt;i&gt;^&lt;/i&gt; for each level (after &lt;i&gt;~&lt;/i&gt;, if present).')
+        img.tooltip(src='#{basepath}images/question.png',title='Enter one node (language or family name) per line.<br>The first line contains the root node; subsequent lines contain child nodes.<br>Embedding is indicated with the appropriate number of dashes (-).<br>For an unlabeled node, use a dot (.).<br>To force a label not to wrap across lines, append <i>~</i>.<br>To push a node up on a flat-style tree, append one <i>^</i> for each level (after <i>~</i>, if present).')
       textarea(name="tree",tabindex=15,rows=18,cols=40)
         | Proto-Indo-European~
         | -Balto-Slavic~

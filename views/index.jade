@@ -2,7 +2,7 @@ extends base
 
 append js
   script(type='text/javascript',src='#{basepath}js/jquery.tooltip.min.js')
-  script(type='text/javascript')
+  script(type='text/javascript').
     var basepath = '#{basepath}';
     $(document).ready(function () {
       $().tooltip();

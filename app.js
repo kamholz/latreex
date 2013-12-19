@@ -8,6 +8,8 @@ var uuid = require('node-uuid');
 var latexTemplate = fs.readFileSync(__dirname + '/latex.ejs', 'utf8');
 var treeDir = __dirname + '/trees';
 
+if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);
+
 var app = express();
 
 app.set('views', __dirname + '/views');

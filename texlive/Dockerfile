@@ -17,3 +17,4 @@ RUN tlmgr install ucs xkeyval collection-fontsrecommended varwidth pgf pstricks 
 RUN apt-get -y remove wget
 RUN apt-get -y autoremove
 RUN apt-get -y install ghostscript
+RUN apt-get clean

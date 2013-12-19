@@ -12,7 +12,7 @@ ADD etc/crontab /etc/crontab
 RUN chown root:root /etc/crontab
 ADD etc/supervisord.conf /etc/supervisor/supervisord.conf
 
-ADD src /src
+ADD . /src
 RUN cd /src; rm -rf node_modules; npm install
 
 EXPOSE 3001

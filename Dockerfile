@@ -17,4 +17,4 @@ RUN cd /src; rm -rf node_modules; npm install
 
 EXPOSE 3001
 ENV NODE_ENV production
-CMD ["supervisord"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]

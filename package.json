@@ -8,14 +8,14 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/kamholz/latreex"
   },
   "dependencies": {
     "ejs": "~0.8.4",
-    "express": "~3.2.6",
-    "jade": "~0.31.2",
+    "express": "~3.4.7",
+    "jade": "~1.0.0",
     "node-uuid": "~1.4.0",
-    "stylus": "~0.32.1"
+    "stylus": "~0.41.3"
   },
   "scripts": {
     "start": "node app.js"

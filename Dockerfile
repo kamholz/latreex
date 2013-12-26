@@ -16,6 +16,7 @@ ADD etc/supervisord.conf /etc/supervisord.conf
 
 ADD . /src
 RUN cd /src; rm -rf node_modules; npm install
+RUN chown -R nobody /src
 
 EXPOSE 3001
 ENV NODE_ENV production

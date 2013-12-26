@@ -5,7 +5,6 @@ RUN echo deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu saucy main > /etc
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C7917B12
 RUN apt-get update
 RUN apt-get -y install nodejs cron supervisor
-RUN apt-get clean
 RUN npm update -g
 
 ADD etc/crontab /etc/crontab

@@ -1,4 +1,8 @@
 var express = require('express');
+var logger = require('morgan');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var errorHandler = require('errorhandler');
 var stylus = require('stylus');
 var ejs = require('ejs');
 var fs = require('fs');
@@ -14,12 +18,10 @@ var app = express();
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-app.set('view options', { layout: false });
 
-app.use(express.bodyParser());
-app.use(express.methodOverride());
+app.use(logger('dev'));
 
-app.use(express.logger(':remote-addr - [:date] ":method :url" :status'));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(stylus.middleware({
     compile: function(str, path) {
@@ -31,20 +33,17 @@ app.use(stylus.middleware({
     src: __dirname + '/public'
 }));
 
-app.use(app.router);
 app.use(express.static(__dirname + '/public'));
 
 if (app.get('env') === 'production') {
-  app.use(express.errorHandler());
+  app.use(errorHandler());
   app.set('basepath', '/latreex/');  
 } else {
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.use(errorHandler({ dumpExceptions: true, showStack: true }));
   app.set('basepath', '/');  
 }
 
-app.locals({
-    basepath: app.set('basepath')
-});
+app.locals.basepath = app.get('basepath');
 
 app.get('/', index);
 app.post('/tex', makeLatex, returnInfo);

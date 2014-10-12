@@ -7,11 +7,11 @@ RUN apt-get update
 RUN apt-get -y install nodejs cron supervisor
 RUN npm update -g
 
-ADD etc/crontab /etc/crontab
+ADD docker/etc/crontab /etc/crontab
 RUN chown root:root /etc/crontab
 
 RUN rm -rf /etc/supervisor
-ADD etc/supervisord.conf /etc/supervisord.conf
+ADD docker/etc/supervisord.conf /etc/supervisor/supervisord.conf
 
 ADD . /src
 RUN cd /src; rm -rf node_modules; npm install

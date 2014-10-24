@@ -4,10 +4,12 @@ latreex:
     - "3001:3001"
   volumes_from:
     - trees
+
 cron:
   build: cron
   volumes_from:
     - trees
+
 trees:
   image: debian:latest
   command: echo data-only container for latreex

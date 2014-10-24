@@ -17,3 +17,6 @@ trees:
   command: echo data-only container for latreex
   volumes:
     - /trees
+
+texlive:
+  build: texlive

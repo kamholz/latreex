@@ -2,7 +2,12 @@ FROM debian:wheezy
 MAINTAINER David Kamholz <lautgesetz@gmail.com>
 
 RUN apt-get update \
-    && apt-get -y install ghostscript perl-modules wget && apt-get clean
+    && apt-get -y --no-install-recommends install \
+        ghostscript \
+        perl-modules \
+        wget \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /install-tl \
     && wget -qO- http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz \

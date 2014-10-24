@@ -1,4 +1,4 @@
-FROM davekam/texlive
+FROM latreex_texlive
 MAINTAINER David Kamholz <lautgesetz@gmail.com>
 
 RUN apt-get update && apt-get -y install apt-transport-https \
@@ -7,7 +7,9 @@ RUN apt-get update && apt-get -y install apt-transport-https \
     && apt-get update \
     && apt-get -y install nodejs \
     && apt-get clean \
-    && npm update -g
+    && rm -rf /var/lib/apt/lists/* \
+    && npm update -g \
+    && npm cache clear
 
 VOLUME /src
 

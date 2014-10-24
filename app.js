@@ -8,9 +8,10 @@ var ejs = require('ejs');
 var fs = require('fs');
 var execFile = require('child_process').execFile;
 var uuid = require('node-uuid');
+var config = require('./config');
 
 var latexTemplate = fs.readFileSync(__dirname + '/latex.ejs', 'utf8');
-var treeDir = __dirname + '/trees';
+var treeDir = config.treeDir || __dirname + '/trees';
 
 if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);
 
@@ -33,15 +34,11 @@ app.use(stylus.middleware({
 
 app.use(express.static(__dirname + '/public'));
 
-if (app.get('env') === 'production') {
-  app.use(errorHandler());
-  app.set('basepath', '/latreex/');  
-} else {
+if (app.get('env') === 'development')
   app.use(errorHandler({ dumpExceptions: true, showStack: true }));
-  app.set('basepath', '/');  
-}
 
-app.locals.basepath = app.get('basepath');
+config.basepath = config.basepath || '/';
+app.locals.basepath = config.basepath;
 
 app.get('/', index);
 app.post('/tex', makeLatex, returnInfo);
@@ -51,8 +48,9 @@ app.get('/tex/:id/:name', getFile('tex','text/plain'));
 app.get('/pdf/:id/:name', getFile('pdf','application/pdf'));
 app.get('/png/:id', getFile('png','image/png'));
 
-app.listen(3001);
-console.log("Express server listening on port %d in %s mode", 3001, app.settings.env);
+config.port = config.port || 3001;
+app.listen(config.port);
+console.log("Express server listening on port %d in %s mode", config.port, app.settings.env);
 
 var paramDefaults = {
     linewidth: '0.3pt',

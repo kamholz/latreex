@@ -20,3 +20,4 @@ trees:
 
 texlive:
   build: texlive
+  command: echo texlive base container

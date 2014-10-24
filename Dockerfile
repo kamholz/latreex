@@ -1,7 +1,10 @@
 FROM latreex_texlive
 MAINTAINER David Kamholz <lautgesetz@gmail.com>
 
-RUN apt-get update && apt-get -y install apt-transport-https \
+RUN apt-get update \
+    && apt-get -y install --no-install-recommends \
+        apt-transport-https \
+        ca-certificates \
     && echo 'deb https://deb.nodesource.com/node wheezy main' > /etc/apt/sources.list.d/nodesource.list \
     && wget -qO- https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
     && apt-get update \

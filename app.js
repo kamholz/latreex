@@ -114,7 +114,7 @@ function returnInfo(req, res, next) {
 function makeFile(ext) {
     return function(req, res, next) {
         execFile(__dirname + '/script/make'+ext+'.sh', [treeDir,req.file], function (code) {
-            if (code) return res.send(409);
+            if (code) return res.sendStatus(409);
             next();
         });
     }
@@ -123,9 +123,9 @@ function makeFile(ext) {
 function getFile(ext, mime) {
     return function(req, res, next) {
         var id = req.params.id;
-        if (!id) return res.send(409);
+        if (!id) return res.sendStatus(409);
         fs.readFile(treeDir+'/'+id+'.'+ext, function (err, data) {
-           if (err) return res.send(409);
+           if (err) return res.sendStatus(409);
            res.attachment();
            res.contentType(mime);
            res.send(data);

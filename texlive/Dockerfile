@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian:wheezy
 MAINTAINER David Kamholz <lautgesetz@gmail.com>
 
 RUN apt-get update \

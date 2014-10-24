@@ -11,7 +11,7 @@ cron:
     - trees
 
 trees:
-  image: debian:latest
+  image: debian:wheezy
   command: echo data-only container for latreex
   volumes:
     - /trees

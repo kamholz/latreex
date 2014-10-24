@@ -1,19 +1,27 @@
-FROM davekam/texlive
+FROM debian:latest
 MAINTAINER David Kamholz <lautgesetz@gmail.com>
 
-RUN echo deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu trusty main > /etc/apt/sources.list.d/nodejs.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C7917B12
-RUN apt-get update && apt-get -y install nodejs cron supervisor && apt-get clean && npm update -g
+RUN apt-get update && apt-get -y install apt-transport-https wget \
+    && echo 'deb https://deb.nodesource.com/node wheezy main' > /etc/apt/sources.list.d/nodesource.list \
+    && wget -qO- https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+    && apt-get update \
+    && apt-get -y install cron ghostscript nodejs perl-modules supervisor \
+    && apt-get clean \
+    && npm update -g
 
-ADD docker/etc/crontab /etc/crontab
-RUN chown root:root /etc/crontab
+RUN mkdir /install-tl \
+    && wget -qO - http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz \
+    | tar -zxf - --strip-components=1 -C /install-tl
+COPY docker/texlive.profile /install-tl/
+RUN /install-tl/install-tl -profile /install-tl/texlive.profile && rm -rf /install-tl
+ENV PATH /usr/local/texlive/2014/bin/x86_64-linux:$PATH
+RUN tlmgr install collection-fontsrecommended pgf pst-eps pst-node pst-tools pst-tree pstricks ucs varwidth xkeyval
 
 RUN rm -rf /etc/supervisor
-ADD docker/etc/supervisord.conf /etc/supervisord.conf
+COPY docker/supervisord.conf /etc/
 
-ADD . /src
-RUN cd /src && rm -rf node_modules && npm install
-RUN chown -R nobody /src
+COPY . /src
+RUN cd /src && npm install
 
 EXPOSE 3001
 ENV NODE_ENV production

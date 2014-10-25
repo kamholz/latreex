@@ -1,4 +1,4 @@
-FROM latreex_texlive
+FROM davekam/latreex_texlive
 MAINTAINER David Kamholz <lautgesetz@gmail.com>
 
 RUN apt-get update \

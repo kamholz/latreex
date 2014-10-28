@@ -4,7 +4,6 @@ containers:
     image: davekam/latreex
     dockerfile: .
     run:
-      publish: ["3001:3000"]
       volumes-from: ["latreex_trees"]
       volume: [".:/src"]
       restart: on-failure

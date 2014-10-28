@@ -5,8 +5,8 @@ containers:
     dockerfile: .
     run:
       volumes-from: ["latreex_trees"]
-      volume: [".:/src"]
-      restart: on-failure
+      volume: [".:/src", "config.json.docker:/src/config.json"]
+      restart: always
       detach: true
 
   latreex_cron:
@@ -14,7 +14,7 @@ containers:
     dockerfile: cron
     run:
       volumes-from: ["latreex_trees"]
-      restart: on-failure
+      restart: always
       detach: true
 
   latreex_trees:
@@ -28,4 +28,4 @@ containers:
     dockerfile: texlive
 
 groups:
-  default: ["latreex_trees", "latreex", "latreex_cron"]
+  default: ["latreex", "latreex_cron", "latreex_trees"]

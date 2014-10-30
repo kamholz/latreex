@@ -48,9 +48,14 @@ app.get('/tex/:id/:name', getFile('tex','text/plain'));
 app.get('/pdf/:id/:name', getFile('pdf','application/pdf'));
 app.get('/png/:id', getFile('png','image/png'));
 
+var proxyApp = express();
+
+proxyApp.use(config.basepath, app);
+
 config.port = config.port || 3001;
-app.listen(config.port);
-console.log("Express server listening on port %d in %s mode", config.port, app.settings.env);
+proxyApp.listen(config.port, function () {
+    console.log("Express server listening on port %d in %s mode", config.port, app.settings.env);
+});
 
 var paramDefaults = {
     linewidth: '0.3pt',

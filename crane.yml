@@ -9,14 +9,6 @@ containers:
       restart: always
       detach: true
 
-  latreex_amb:
-    image: cpuguy83/docker-grand-ambassador
-    run:
-      cmd: -name latreex
-      volume: ["/var/run/docker.sock:/var/run/docker.sock"]
-      restart: always
-      detach: true
-
   latreex_cron:
     image: davekam/latreex_cron
     dockerfile: cron

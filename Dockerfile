@@ -11,7 +11,7 @@ RUN apt-get update \
     && apt-get -y install nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && npm update -g \
+    && npm install -g npm@latest \
     && npm cache clear
 
 VOLUME /src

@@ -48,9 +48,13 @@ app.get('/tex/:id/:name', getFile('tex','text/plain'));
 app.get('/pdf/:id/:name', getFile('pdf','application/pdf'));
 app.get('/png/:id', getFile('png','image/png'));
 
-var proxyApp = express();
+var proxyApp;
 
-proxyApp.use(config.basepath, app);
+if (config.basepath !== '/') {
+    proxyApp = express();
+    proxyApp.use(config.basepath, app);
+}
+else proxyApp = app;
 
 config.port = config.port || 3001;
 proxyApp.listen(config.port, function () {

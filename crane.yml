@@ -4,6 +4,7 @@ containers:
     image: davekam/latreex
     dockerfile: .
     run:
+      publish: ["127.0.0.1:4001:3000"]
       volumes-from: ["latreex_trees"]
       volume: [".:/src", "config.json.docker:/src/config.json"]
       restart: always

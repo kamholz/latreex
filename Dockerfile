@@ -14,10 +14,15 @@ RUN apt-get update \
     && npm install -g npm@latest \
     && npm cache clear
 
-VOLUME /src
-
 EXPOSE 3000
 
 ENV NODE_ENV production
+
+ADD . /src
+
+RUN cd /src \
+    && chown -R www-data public \
+    && npm install \
+    && npm cache clear
 
 CMD ["node", "/src/app.js"]

@@ -4,9 +4,10 @@ containers:
     image: davekam/latreex
     dockerfile: .
     run:
+      user: www-data
       publish: ["127.0.0.1:4001:3000"]
       volumes-from: ["latreex_trees"]
-      volume: [".:/src", "config.json.docker:/src/config.json"]
+      volume: ["config.json.docker:/src/config.json"]
       restart: always
       detach: true
 
@@ -21,7 +22,7 @@ containers:
   latreex_trees:
     image: busybox:latest
     run:
-      cmd: echo data-only container for latreex
+      cmd: sh -c 'chown www-data /trees && echo data-only container for latreex'
       volume: ["/trees"]
 
   latreex_texlive:

@@ -1,6 +1,6 @@
 .git
 .DS_Store
+crane.yml
 cron
-fig.yml
 node_modules
 texlive

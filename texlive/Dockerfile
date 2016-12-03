@@ -17,6 +17,6 @@ COPY texlive.profile /install-tl/
 
 RUN /install-tl/install-tl -profile /install-tl/texlive.profile && rm -rf /install-tl
 
-ENV PATH /usr/local/texlive/2014/bin/x86_64-linux:$PATH
+ENV PATH /usr/local/texlive/2016/bin/x86_64-linux:$PATH
 
 RUN tlmgr install collection-fontsrecommended pgf pst-eps pst-node pst-tools pst-tree pstricks ucs varwidth xkeyval

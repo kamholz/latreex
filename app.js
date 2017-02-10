@@ -11,9 +11,12 @@ var uuid = require('node-uuid');
 var config = require('./config');
 
 var fontMap = {
-    helvetica:  'Helvetica',
-    times:      'Times',
-    courier:    'Courier'
+    notosans:   'Noto Sans',
+    notoserif:  'Noto Serif',
+    notomono:   'Noto Mono',
+    arial:      'Arial',
+    times:      'Times New Roman',
+    courier:    'Courier New'
 };
 
 var latexTemplate = fs.readFileSync(__dirname + '/latex.ejs', 'utf8');
@@ -74,13 +77,13 @@ var paramDefaults = {
     LFTwidth: '15ex',
     LFTsep: '4pt',
     orient: 'D',
-    font: 'times',
+    font: 'notosans',
     style: 'nonflat'
 };
 
 var paramValidate = {
     orient: /^(D|U|R|L)$/,
-    font: /^(times|helvetica|courier)$/,
+    font: /^(notosans|notoserif|notomono|arial|times|courier)$/,
     style: /^(flat|nonflat)$/
 };
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {

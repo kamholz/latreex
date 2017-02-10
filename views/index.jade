@@ -101,14 +101,13 @@ block body
         ul
           li Font:
           li
-            input#font_arial(type='radio',name='font',value='arial',checked='checked',tabindex=12)
-            label(for='font_sf') Arial
-          li
-            input#font_times(type='radio',name='font',value='times',tabindex=13)
-            label(for='font_rm') Times
-          li
-            input#font_courier(type='radio',name='font',value='courier',tabindex=14)
-            label(for='font_tt') Courier
+            select#font(name='font')
+              option(value='notosans', selected='selected') Noto Sans
+              option(value='notoserif') Noto Serif
+              option(value='notomono') Noto Mono
+              option(value='arial') Arial
+              option(value='times') Times New Roman
+              option(value='courier') Courier New
 
     .left
       p Enter tree:

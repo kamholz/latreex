@@ -10,6 +10,12 @@ var execFile = require('child_process').execFile;
 var uuid = require('node-uuid');
 var config = require('./config');
 
+var fontMap = {
+    helvetica:  'Helvetica',
+    times:      'Times',
+    courier:    'Courier'
+};
+
 var latexTemplate = fs.readFileSync(__dirname + '/latex.ejs', 'utf8');
 var treeDir = config.treeDir || __dirname + '/trees';
 
@@ -68,13 +74,13 @@ var paramDefaults = {
     LFTwidth: '15ex',
     LFTsep: '4pt',
     orient: 'D',
-    font: 'sf',
+    font: 'times',
     style: 'nonflat'
 };
 
 var paramValidate = {
     orient: /^(D|U|R|L)$/,
-    font: /^(rm|sf|tt)$/,
+    font: /^(times|helvetica|courier)$/,
     style: /^(flat|nonflat)$/
 };
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
@@ -94,7 +100,7 @@ function index(req, res, next) {
 
 function makeLatex(req, res, next) {
     var p = req.body;
-    
+
     for (var i in p) p[i] = p[i].trim();
     for (var i in paramValidate) {
         if (p[i] !== undefined && !p[i].match(paramValidate[i])) delete p[i];
@@ -102,17 +108,18 @@ function makeLatex(req, res, next) {
     for (var i in paramDefaults) {
         if (!p[i]) p[i] = paramDefaults[i];
     }
-    
+
     p.json = JSON.stringify(p, Object.keys(p).sort());
-        
-    p.refpoint = orientToRefpoint[p.orient];    
+
+    p.font = fontMap[p.font];
+    p.refpoint = orientToRefpoint[p.orient];
     p.tree = parseTree(p.tree.split(/\r\n/))[0];
     p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };
     p.roman = function(dec) { return roman(dec).toLowerCase() };
-    
+
     req.file = uuid.v4();
     req.treeName = getTreeName(p.tree.value);
-    
+
     fs.writeFile(treeDir+'/'+req.file+'.tex', ejs.render(latexTemplate, p), 'utf8', next);
 }
 
@@ -145,7 +152,7 @@ function getFile(ext, mime) {
 function parseTree(lines, lineNum, depth) {
     var tree = [];
     lineNum = lineNum || 0;
-    
+
     for (var i = lineNum, l = lines.length; i < l; i++) {
         var captures = /^(-*)\s*(.+)$/.exec(lines[i]);
         if (!captures) continue; // blank or malformed line
@@ -163,7 +170,7 @@ function parseTree(lines, lineNum, depth) {
             i += subtree.numLines - 1;
         }
     }
-    
+
     tree.numLines = i - lineNum;
     return tree;
 }
@@ -172,7 +179,7 @@ function pstNode(p, treeNode, depth) {
     var str = '';
     var node, afternode;
     var captures = /^(\.?)(.*?)(~?)(\^*)$/.exec(treeNode.value);
-    
+
     if (captures[1] != '' || captures[2] == '') {
         node = "\\Tn";
         afternode = "\\Tp";
@@ -180,27 +187,27 @@ function pstNode(p, treeNode, depth) {
         node = (captures[3] != '' ? '\\LFTr' : '\\LFTw') + "{"+p.refpoint+"}{"+escapeLatex(captures[2])+"}";
         afternode = "\\Tp[edge=none]";
     }
-    
+
     str += "\n";
     var i = depth;
     while (i--) str += "  ";
-    
+
     var skip = 0;
     if (p.style === 'flat') {
         skip = p.tree.height - depth - treeNode.height;
         if (captures[4]) skip -= captures[4].length;
         if (skip < 0) skip = 0;
     }
-    
+
     if (skip > 0) str += "\\skiplevels{"+skip*2+"} ";
-    
+
     if (treeNode.children.length) {
         str += "\\pstree{"+node+"}{\\pstree{"+afternode+"}{%";
         treeNode.children.forEach(function (x) { str += pstNode(p, x, depth+skip+1) });
         str += "}}";
     }
     else str += node;
-    
+
     if (skip > 0) str += " \\endskiplevels";
 
     return str;
@@ -216,7 +223,7 @@ function getTreeName(txt) {
     return txt;
 }
 
-var D = [1,5,10,50,100,500,1000], 
+var D = [1,5,10,50,100,500,1000],
     R = ['I','V','X','L','C','D','M'];
 
 function roman(dec) {

@@ -3,8 +3,9 @@
 % <%- json %>
 
 \documentclass{article}
-\usepackage[utf8x]{inputenc}
-\usepackage{times,varwidth,pst-tree,pst-eps}
+\usepackage{fontspec,varwidth,pst-tree}
+\usepackage[active,tightpage,xetex]{preview}
+\setmainfont{<%- font %>}
 \pagestyle{empty}
 \psset{showbbox=false,treemode=<%- orient %>,linewidth=<%- linewidth %>,treesep=<%- treesep %>,levelsep=<%- levelsep %>}
 \newcommand{\LFTw}[2]{%
@@ -16,8 +17,8 @@
 \def\pstreehook<%- roman(2*i - 1) %>{\psset{thislevelsep=*0pt}}
 <% } -%>
 
-\begin{document}\begin{TeXtoEPS}
-\small\<%- font %>
+\begin{document}\begin{preview}
+\small
 \psframebox[linestyle=none,framesep=10pt]{%
 <%- pstTree() %>}
-\end{TeXtoEPS}\end{document}
+\end{preview}\end{document}

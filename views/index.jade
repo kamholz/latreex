@@ -8,7 +8,7 @@ append js
       $().tooltip();
       var height = $('#tooltip').innerHeight();
       $('img.tooltip').tooltip({ showURL: false, top: -height, left: 20 });
-    
+
       $('#preview').click(function () {
         var div = $('#previewImage');
         div.html('Loading preview...');
@@ -17,24 +17,24 @@ append js
           div.append($("<img />").attr('src', basepath+'png/'+data.id));
         });
       });
-    
+
       $('#latex').click(function () { downloadFile('tex') });
       $('#pdf').click(function () { downloadFile('pdf') });
-      
+
       $('#template').click(function () {
         var json = prompt("Paste the indicated line from the LaTeX source:");
         if (!json) return;
         json = $.parseJSON(json.trim().replace(/^%\s*/,''));
-        
+
         var form = $('#form');
         for (var i in json) {
           var elt = form.find('[name='+i+']');
           if (elt.size() > 1) elt.val([json[i]]);
           else elt.val(json[i]);
         }
-      });      
+      });
     });
-    
+
     function downloadFile(ext) {
       $.post(basepath+ext, $('#form').serializeArray(), function (data) {
         window.location.pathname = basepath+ext+'/'+data.id+'/'+data.name+'.'+ext;
@@ -45,7 +45,7 @@ block body
   h1 LaTreeX: LaTeX-based language family tree generator
 
   form#form(method='post',action='/')
-  
+
     .left
       #space.rowform
         ul
@@ -74,7 +74,7 @@ block body
         ul
           li Style:
             img.tooltip(src='#{basepath}images/question.png',title='In non-flat trees, parent and daughter nodes are always the same distance apart.<br>In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other.<br>The flat style is generally only practical for smaller trees.')
-          li  
+          li
             input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=7)
             label(for='style_nonflat') Non-flat
           li
@@ -101,13 +101,13 @@ block body
         ul
           li Font:
           li
-            input#font_sf(type='radio',name='font',value='sf',checked='checked',tabindex=12)
+            input#font_helvetica(type='radio',name='font',value='helvetica',checked='checked',tabindex=12)
             label(for='font_sf') Helvetica
           li
-            input#font_rm(type='radio',name='font',value='rm',tabindex=13)
+            input#font_times(type='radio',name='font',value='times',tabindex=13)
             label(for='font_rm') Times
           li
-            input#font_tt(type='radio',name='font',value='tt',tabindex=14)
+            input#font_courier(type='radio',name='font',value='courier',tabindex=14)
             label(for='font_tt') Courier
 
     .left
@@ -131,12 +131,12 @@ block body
         | --Celtic
         | -Greek
         | -Anatolian
-          
+
   .clearfix
   #buttons
     button#preview Preview Tree
     button#latex Download LaTeX source
     button#pdf Download PDF
     button#template Paste Template
-  
+
   #previewImage

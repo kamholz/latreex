@@ -18,8 +18,8 @@ append js
         fontopt.toggle();
         fontoptVisible = !fontoptVisible;
 
-        if (fontoptVisible) $(this).html('Fewer Font Options');
-        else $(this).html('More Font Options');
+        if (fontoptVisible) $(this).html('Hide Font Options');
+        else $(this).html('Show Font Options');
       });
 
       $('#preview').click(function () {
@@ -125,7 +125,7 @@ block body
               option(value='noto_serif') Noto Serif
               option(value='times') Times New Roman
             li
-              button#fontoptToggle(type='button') More Font Options
+              button#fontoptToggle(type='button') Show Font Options
         div#fontopt
           ul.select
             li Noto Arabic:

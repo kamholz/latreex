@@ -6,6 +6,10 @@
 \usepackage{fontspec,varwidth,pst-tree}
 \usepackage[active,tightpage,xetex]{preview}
 \setmainfont{<%- font %>}
+<% if (font.match(/^Noto/)) { -%>
+\usepackage{ucharclasses}
+<%- ucharclasses.replace(/NOTO/g, font) %>
+<% } -%>
 \pagestyle{empty}
 \psset{showbbox=false,treemode=<%- orient %>,linewidth=<%- linewidth %>,treesep=<%- treesep %>,levelsep=<%- levelsep %>}
 \newcommand{\LFTw}[2]{%

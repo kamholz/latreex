@@ -20,6 +20,7 @@ var fontMap = {
 };
 
 var latexTemplate = fs.readFileSync(__dirname + '/latex.ejs', 'utf8');
+var ucharclasses = fs.readFileSync(__dirname + '/ucharclasses.tex', 'utf8');
 var treeDir = config.treeDir || __dirname + '/trees';
 
 if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);
@@ -119,6 +120,7 @@ function makeLatex(req, res, next) {
     p.tree = parseTree(p.tree.split(/\r\n/))[0];
     p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };
     p.roman = function(dec) { return roman(dec).toLowerCase() };
+    p.ucharclasses = ucharclasses;
 
     req.file = uuid.v4();
     req.treeName = getTreeName(p.tree.value);

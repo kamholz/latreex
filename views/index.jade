@@ -98,7 +98,7 @@ block body
             label(for='orient_U') Bottom to top
 
       .rowform.left
-        ul
+        ul.select
           li Font:
           li
             select#font(name='font')
@@ -108,6 +108,13 @@ block body
               option(value='arial') Arial
               option(value='times') Times New Roman
               option(value='courier') Courier New
+          li CJK style:
+          li
+            select#font(name='cjk')
+              option(value='SC', selected='selected') Simplified Chinese
+              option(value='TC') Traditional Chinese
+              option(value='JP') Japanese
+              option(value='KR') Korean
 
     .left
       p Enter tree:

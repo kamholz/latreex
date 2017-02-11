@@ -10,18 +10,54 @@ var fs = require('fs');
 var uuid = require('node-uuid');
 
 var config = require('./config');
+var fontspecScriptMap = require('./lib/fontspec');
+var latexLanguageMap = require('./lib/latex');
 var latexTemplate = fs.readFileSync(__dirname + '/lib/latex.ejs', 'utf8');
-var noto = require('./lib/noto');
+var notoFontMap = require('./lib/noto');
 var script = require('./lib/script');
 var treeDir = config.treeDir || __dirname + '/trees';
 
+var paramDefaults = {
+    linewidth:  '0.3pt',
+    treesep:    '4ex',
+    levelsep:   '2cm',
+    LFTwidth:   '15ex',
+    LFTsep:     '4pt',
+    orient:     'D',
+    style:      'nonflat',
+    font:       'noto_sans',
+    arabic:     'Naskh Arabic',
+    cjk:        'SC',
+    syriac:     'Western',
+};
+
+var paramValidate = {
+    orient: /^(?:D|U|R|L)$/,
+    style:  /^(?:flat|nonflat)$/,
+    font:   /^(?:noto_(?:sans|serif|mono)|latex_(?:gfs(?:didot|porson)|times_(?:sf|rm|tt))|arial|times|courier)$/,
+    arabic: /^(?:Kufi Arabic|Naskh Arabic|Nastaliq Urdu)$/,
+    cjk:    /^(?:SC|TC|JP|KR)$/,
+    syriac: /^(?:Western|Eastern|Estrangela)$/,
+};
+
+['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
+    paramValidate[p] = /^(?:[0-9]+)?\.?[0-9]+(?:in|mm|cm|pt|em|ex|pc|bp|dd|cc|sp)$/;
+});
+
+var orientToRefpoint = {
+    D: 't',
+    R: 'l',
+    L: 'r',
+    U: 'b'
+};
+
 var fontMap = {
+    arial:      'Arial',
+    courier:    'Courier New',
     noto_sans:  'Noto Sans',
     noto_serif: 'Noto Serif',
     noto_mono:  'Noto Mono',
-    arial:      'Arial',
     times:      'Times New Roman',
-    courier:    'Courier New'
 };
 
 if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);
@@ -71,36 +107,6 @@ config.port = config.port || 3001;
 proxyApp.listen(config.port, function () {
     console.log("Express server listening on port %d in %s mode", config.port, app.settings.env);
 });
-
-var paramDefaults = {
-    linewidth:  '0.3pt',
-    treesep:    '4ex',
-    levelsep:   '2cm',
-    LFTwidth:   '15ex',
-    LFTsep:     '4pt',
-    orient:     'D',
-    font:       'noto_sans',
-    cjk:        'SC',
-    style:      'nonflat'
-};
-
-var paramValidate = {
-    orient: /^(?:D|U|R|L)$/,
-    font:   /^(?:noto_(?:sans|serif|mono)|latex_(?:gfs(?:didot|porson)|times_(?:sf|rm|tt))|arial|times|courier)$/,
-    cjk:    /^(?:SC|TC|JP|KR)$/,
-    style:  /^(?:flat|nonflat)$/
-};
-
-['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
-    paramValidate[p] = /^(?:[0-9]+)?\.?[0-9]+(?:in|mm|cm|pt|em|ex|pc|bp|dd|cc|sp)$/;
-});
-
-var orientToRefpoint = {
-    D: 't',
-    R: 'l',
-    L: 'r',
-    U: 'b'
-};
 
 function index(req, res, next) {
     res.render('index');
@@ -238,20 +244,35 @@ function nodeLabel(txt, p) {
 
         script.split(txt).forEach(function (chunk) {
             var substituteFont;
-            if (noto[p.font] && noto[p.font][chunk[1]]) substituteFont = noto[p.font][chunk[1]];
-            else substituteFont = noto.general[chunk[1]];
+            if (notoFontMap[p.font] && notoFontMap[p.font][chunk[1]])
+                substituteFont = notoFontMap[p.font][chunk[1]];
+            else substituteFont = notoFontMap.general[chunk[1]];
 
             var font = substituteFont || p.font;
 
             if (font !== lastFont) {
-                str += '\\setmainfont{'+font;
-                if (font.match(/CJK$/)) str += ' ' + p.cjk;
-                str += '}';
+                str += '\\setmainfont{'
+                    + font.replace(/\$([a-z]+)/g, function (match, p1) { return p[p1] })
+                    + '}';
+
+                if (fontspecScriptMap[chunk[1]])
+                    str += '[Script='+fontspecScriptMap[chunk[1]]+']';
 
                 lastFont = font;
             }
 
-            str += escapeLatex(txt);
+            str += escapeLatex(chunk[0]);
+        });
+
+        return str;
+    }
+    else if (p.latex) {
+        var str = '';
+
+        script.split(txt).forEach(function (chunk) {
+            var lang = latexLanguageMap[chunk[1]];
+            if (lang) str +='\\foreignlanguage{'+lang+'}{'+escapeLatex(chunk[0])+'}';
+            else str += escapeLatex(chunk[0]);
         });
 
         return str;

@@ -9,12 +9,24 @@ append js
       var height = $('#tooltip').innerHeight();
       $('img.tooltip').tooltip({ showURL: false, top: -height, left: 20 });
 
+      var fontopt = $('#fontopt');
+      var fontoptVisible = false;
+      var form = $('#form');
+      var previewImage = $('#previewImage');
+
+      $('#fontoptToggle').click(function () {
+        fontopt.toggle();
+        fontoptVisible = !fontoptVisible;
+
+        if (fontoptVisible) $(this).html('Hide Font Options');
+        else $(this).html('Show Font Options');
+      });
+
       $('#preview').click(function () {
-        var div = $('#previewImage');
-        div.html('Loading preview...');
+        previewImage.html('Loading preview...');
         $.post(basepath+'png', $('#form').serializeArray(), function (data) {
-          div.html('');
-          div.append($("<img />").attr('src', basepath+'png/'+data.id));
+          previewImage.html('');
+          previewImage.append($("<img />").attr('src', basepath+'png/'+data.id));
         });
       });
 
@@ -26,7 +38,6 @@ append js
         if (!json) return;
         json = $.parseJSON(json.trim().replace(/^%\s*/,''));
 
-        var form = $('#form');
         for (var i in json) {
           var elt = form.find('[name='+i+']');
           if (elt.size() > 1) elt.val([json[i]]);
@@ -101,7 +112,7 @@ block body
         ul.select
           li Font:
           li
-            select#font(name='font')
+            select(name='font')
               option(value='arial') Arial
               option(value='courier') Courier New
               option(value='latex_times_tt') LaTeX Courier
@@ -113,13 +124,29 @@ block body
               option(value='noto_sans') Noto Sans
               option(value='noto_serif') Noto Serif
               option(value='times') Times New Roman
-          li Noto CJK style:
-          li
-            select#font(name='cjk')
-              option(value='SC', selected='selected') Simplified Chinese
-              option(value='TC') Traditional Chinese
-              option(value='JP') Japanese
-              option(value='KR') Korean
+            li
+              button#fontoptToggle(type='button') Show Font Options
+        div#fontopt
+          ul.select
+            li Noto Arabic:
+            li
+              select(name='arabic')
+                option(value='Kufi Arabic') Kufi
+                option(value='Naskh Arabic', selected='selected') Naskh
+                option(value='Nastaliq Urdu') Nastaliq
+            li Noto CJK:
+            li
+              select(name='cjk')
+                option(value='JP') Japanese
+                option(value='KR') Korean
+                option(value='SC', selected='selected') Simplified Chinese
+                option(value='TC') Traditional Chinese
+            li Noto Syriac:
+            li
+              select(name='syriac')
+                option(value='Eastern') Eastern
+                option(value='Estrangela') Estrangela
+                option(value='Western', selected='selected') Western
 
     .left
       p Enter tree:

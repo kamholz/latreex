@@ -9,6 +9,13 @@ opacity(n)
   opacity n
   filter unquote('progid:DXImageTransform.Microsoft.Alpha(Opacity=' + round(n * 100) + ')')
 
+transform-scale(n)
+  -ms-transform scale(n,n)
+  -webkit-transform scale(n,n)
+  -ms-transform-origin 0
+  -webkit-transform-origin 0 0
+  transform scale(n,n)
+
 body
   font-size 13pt
   font-family sans-serif
@@ -85,3 +92,4 @@ button
   text-align center
   img
     max-width 100%
+    transform-scale(0.75)

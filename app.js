@@ -16,9 +16,9 @@ var script = require('./lib/script');
 var treeDir = config.treeDir || __dirname + '/trees';
 
 var fontMap = {
-    notosans:   'Noto Sans',
-    notoserif:  'Noto Serif',
-    notomono:   'Noto Mono',
+    noto_sans:  'Noto Sans',
+    noto_serif: 'Noto Serif',
+    noto_mono:  'Noto Mono',
     arial:      'Arial',
     times:      'Times New Roman',
     courier:    'Courier New'
@@ -79,14 +79,14 @@ var paramDefaults = {
     LFTwidth:   '15ex',
     LFTsep:     '4pt',
     orient:     'D',
-    font:       'notosans',
+    font:       'noto_sans',
     cjk:        'SC',
     style:      'nonflat'
 };
 
 var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
-    font:   /^(?:notosans|notoserif|notomono|arial|times|courier)$/,
+    font:   /^(?:noto_(?:sans|serif|mono)|latex_(?:gfs(?:didot|porson)|times_(?:sf|rm|tt))|arial|times|courier)$/,
     cjk:    /^(?:SC|TC|JP|KR)$/,
     style:  /^(?:flat|nonflat)$/
 };
@@ -119,7 +119,16 @@ function makeLatex(req, res, next) {
 
     p.json = JSON.stringify(p, Object.keys(p).sort());
 
-    p.font = fontMap[p.font];
+    var captures = p.font.match(/^latex_([a-z]+)(?:_([a-z]+))?$/);
+    if (captures) {
+        p.latex = captures[1];
+        p.font = captures[2];
+    }
+    else {
+        p.font = fontMap[p.font];
+        p.latex = false;
+    }
+
     p.refpoint = orientToRefpoint[p.orient];
     p.tree = parseTree(p.tree.split(/\r\n/))[0];
     p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };
@@ -162,7 +171,7 @@ function parseTree(lines, lineNum, depth) {
     lineNum = lineNum || 0;
 
     for (var i = lineNum, l = lines.length; i < l; i++) {
-        var captures = /^(-*)\s*(.+)$/.exec(lines[i]);
+        var captures = lines[i].match(/^(-*)\s*(.+)$/);
         if (!captures) continue; // blank or malformed line
 
         var newDepth = captures[1].length;
@@ -186,7 +195,7 @@ function parseTree(lines, lineNum, depth) {
 function pstNode(p, treeNode, depth) {
     var str = '';
     var node, afternode;
-    var captures = /^(\.?)(.*?)(~?)(\^*)$/.exec(treeNode.value);
+    var captures = treeNode.value.match(/^(\.?)(.*?)(~?)(\^*)$/);
 
     if (captures[1] !== '' || captures[2] === '') {
         node = '\\Tn';
@@ -223,7 +232,7 @@ function pstNode(p, treeNode, depth) {
 }
 
 function nodeLabel(txt, p) {
-    if (p.font.match(/^Noto/)) {
+    if (p.font && p.font.match(/^Noto/)) {
         var str = '';
         var lastFont;
 
@@ -254,7 +263,9 @@ function escapeLatex(txt) {
     return txt
         .replace(/\\/g,'\\textbackslash{}')
         .replace(/~/g,'\\textasciitilde{}')
-        .replace(/[&$%#]/g,'\\$1');
+        .replace(/[&$%#]/g,'\\$1')
+        .replace(/\*([^*]+)\*/g, '\\textbf{$1}')
+        .replace(/_([^_]+)_/g, '\\textit{$1}');
 }
 
 function getTreeName(txt) {

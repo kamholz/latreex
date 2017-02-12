@@ -10,38 +10,11 @@ var fs = require('fs');
 var uuid = require('uuid');
 
 var config = require('./config');
+var fontMap = require('./lib/font');
 var fontspecScriptMap = require('./lib/fontspec_script');
 var latexTemplate = fs.readFileSync(__dirname + '/lib/latex.ejs', 'utf8');
 var notoFontMap = require('./lib/noto');
 var script = require('./lib/script');
-
-var fontMap = {
-    alfios:             'Alfios',
-    amiri:              'Amiri',
-    arial:              'Arial',
-    arefruqaa:          'Aref Ruqaa',
-    babelstone:         'BabelStone Han',
-    courier:            'Courier New',
-    didot:              'GFS DidotClassic',
-    hussaini_nastaleeq: 'Hussaini Nastaleeq',
-    neohellenic:        'GFS Neohellenic',
-    noto_jp:            'Noto Sans CJK JP',
-    noto_kr:            'Noto Sans CJK KR',
-    noto_kufi:          'Noto Kufi Arabic',
-    noto_mono:          'Noto Mono',
-    noto_naskh:         'Noto Naskh Arabic',
-    noto_nastaliq:      'Noto Nastaliq Urdu',
-    noto_sans:          'Noto Sans',
-    noto_sc:            'Noto Sans CJK SC',
-    noto_serif:         'Noto Serif',
-    noto_tc:            'Noto Sans CJK TC',
-    porson:             'GFS Porson',
-    syriac_eastern:     'Noto Sans Syriac Eastern',
-    syriac_estrangela:  'Noto Sans Syriac Estrangela',
-    syriac_western:     'Noto Sans Syriac Western',
-    times:              'Times New Roman',
-    xcharter:           'XCharter',
-};
 
 var paramDefaults = {
     linewidth:  '0.3pt',

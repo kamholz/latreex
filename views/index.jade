@@ -15,7 +15,6 @@ append js
       var fontoptVisible = false;
       var fontspec = $('#fontspec');
       var form = $('#form');
-      var greekFont = $('#greekfont');
       var noto = $('#noto');
       var previewImage = $('#previewImage');
 
@@ -30,10 +29,7 @@ append js
           fontopt.toggle(fontoptVisible);
           fontoptToggle.show();
 
-          if (val.match(/^noto/)) {
-            noto.show();
-            greekFont.val(val);
-          }
+          if (val.match(/^noto/)) noto.show();
           else noto.hide();
         }
       });
@@ -154,11 +150,12 @@ block body
           ul.select
             li Greek:
             li
-              select#greekfont(name='greek')
+              select(name='greek')
+                option(value='noop', selected='selected') (same)
                 option(value='didot') GFS Didot
-                option(value='porson', selected) GFS Porson
+                option(value='porson') GFS Porson
                 option(value='noto_mono') Noto Mono
-                option(value='noto_sans', selected='selected') Noto Sans
+                option(value='noto_sans') Noto Sans
                 option(value='noto_serif') Noto Serif
             li Arabic:
             li

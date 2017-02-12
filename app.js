@@ -27,7 +27,7 @@ var paramDefaults = {
     font:       'noto_sans',
     arabic:     'noto_naskh',
     cjk:        'sc',
-    greek:      'noto_sans',
+    greek:      'noop',
     syriac:     'western',
 };
 
@@ -37,7 +37,7 @@ var paramValidate = {
     font:   /^(?:arial|courier|noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|times)|xcharter$/,
     arabic: /^(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^(?:sc|tc|jp|kr)$/,
-    greek:  /^(?:didot|noto_(?:sans|serif)|porson)$/,
+    greek:  /^(?:didot|noop|noto_(?:sans|serif)|porson)$/,
     syriac: /^(?:western|eastern|estrangela)$/,
 };
 
@@ -146,10 +146,8 @@ function makeLatex(req, res, next) {
     }
     else {
         p.font = fontMap[p.font];
-        p.fontspecMap = {
-            arabic: fontMap[p.arabic],
-            greek: fontMap[p.greek],
-        };
+        p.fontspecMap = { arabic: fontMap[p.arabic] };
+        if (p.greek !== 'noop') p.fontSpecMap.greek = p.greek;
         p.latex = false;
     }
 

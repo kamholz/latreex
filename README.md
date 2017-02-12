@@ -1,4 +1,4 @@
 latreex
 =======
 
-LaTeX tree maker: http://lautgesetz.com/latreex/
+LaTeX tree maker: https://lautgesetz.com/latreex/

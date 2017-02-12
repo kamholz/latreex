@@ -1,20 +1,47 @@
 var express = require('express');
-var logger = require('morgan');
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
+var logger = require('morgan');
 var stylus = require('stylus');
 
 var ejs = require('ejs');
 var execFile = require('child_process').execFile;
 var fs = require('fs');
-var uuid = require('node-uuid');
+var uuid = require('uuid');
 
 var config = require('./config');
 var fontspecScriptMap = require('./lib/fontspec_script');
 var latexTemplate = fs.readFileSync(__dirname + '/lib/latex.ejs', 'utf8');
 var notoFontMap = require('./lib/noto');
 var script = require('./lib/script');
-var treeDir = config.treeDir || __dirname + '/trees';
+
+var fontMap = {
+    alfios:             'Alfios',
+    amiri:              'Amiri',
+    arial:              'Arial',
+    arefruqaa:          'Aref Ruqaa',
+    babelstone:         'BabelStone Han',
+    courier:            'Courier New',
+    didot:              'GFS DidotClassic',
+    hussaini_nastaleeq: 'Hussaini Nastaleeq',
+    neohellenic:        'GFS Neohellenic',
+    noto_jp:            'Noto Sans CJK JP',
+    noto_kr:            'Noto Sans CJK KR',
+    noto_kufi:          'Noto Kufi Arabic',
+    noto_mono:          'Noto Mono',
+    noto_naskh:         'Noto Naskh Arabic',
+    noto_nastaliq:      'Noto Nastaliq Urdu',
+    noto_sans:          'Noto Sans',
+    noto_sc:            'Noto Sans CJK SC',
+    noto_serif:         'Noto Serif',
+    noto_tc:            'Noto Sans CJK TC',
+    porson:             'GFS Porson',
+    syriac_eastern:     'Noto Sans Syriac Eastern',
+    syriac_estrangela:  'Noto Sans Syriac Estrangela',
+    syriac_western:     'Noto Sans Syriac Western',
+    times:              'Times New Roman',
+    xcharter:           'XCharter',
+};
 
 var paramDefaults = {
     linewidth:  '0.3pt',
@@ -52,34 +79,7 @@ var orientToRefpoint = {
     U: 'b'
 };
 
-var fontMap = {
-    alfios:             'Alfios',
-    amiri:              'Amiri',
-    arial:              'Arial',
-    arefruqaa:          'Aref Ruqaa',
-    babelstone:         'BabelStone Han',
-    courier:            'Courier New',
-    didot:              'GFS DidotClassic',
-    hussaini_nastaleeq: 'Hussaini Nastaleeq',
-    neohellenic:        'GFS Neohellenic',
-    noto_jp:            'Noto Sans CJK JP',
-    noto_kr:            'Noto Sans CJK KR',
-    noto_kufi:          'Noto Kufi Arabic',
-    noto_mono:          'Noto Mono',
-    noto_naskh:         'Noto Naskh Arabic',
-    noto_nastaliq:      'Noto Nastaliq Urdu',
-    noto_sans:          'Noto Sans',
-    noto_sc:            'Noto Sans CJK SC',
-    noto_serif:         'Noto Serif',
-    noto_tc:            'Noto Sans CJK TC',
-    porson:             'GFS Porson',
-    syriac_eastern:     'Noto Sans Syriac Eastern',
-    syriac_estrangela:  'Noto Sans Syriac Estrangela',
-    syriac_western:     'Noto Sans Syriac Western',
-    times:              'Times New Roman',
-    xcharter:           'XCharter',
-};
-
+var treeDir = config.treeDir || __dirname + '/trees';
 if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);
 
 var app = express();
@@ -137,10 +137,7 @@ function makeLatex(req, res, next) {
 
     for (var i in p) p[i] = p[i].trim();
     for (var i in paramValidate) {
-        if (p[i] !== undefined && !p[i].match(paramValidate[i])) delete p[i];
-    }
-    for (var i in paramDefaults) {
-        if (p[i] === undefined) p[i] = paramDefaults[i];
+        if (p[i] === undefined || !p[i].match(paramValidate[i])) p[i] = paramDefaults[i];
     }
 
     p.json = JSON.stringify(p, Object.keys(p).sort());
@@ -153,14 +150,10 @@ function makeLatex(req, res, next) {
     else {
         p.font = fontMap[p.font];
 
-        p.fontspecMap = {
-            arabic:     fontMap[p.arabic],
-            bopomofo:   fontMap[p.cjk],
-            han:        fontMap[p.cjk],
-            hangul:     fontMap[p.cjk],
-            hiragana:   fontMap[p.cjk],
-            katakana:   fontMap[p.cjk],
-        };
+        p.fontspecMap = { arabic: fontMap[p.arabic] };
+        ['bopomofo','han','hangul','hiragana','katakana'].forEach(function (i) {
+            p.fontspecMap[i] = fontMap[p.cjk];
+        });
         if (p.greek !== 'noop') p.fontspecMap.greek = fontMap[p.greek];
 
         p.latex = false;
@@ -272,7 +265,7 @@ function nodeLabel(txt, p) {
     if (p.latex) return escapeLatex(txt);;
 
     var str = '';
-    var lastFont;
+    var lastFont, lastScript;
 
     script.split(txt).forEach(function (chunk) {
         var chunkScript = chunk[1];
@@ -280,20 +273,21 @@ function nodeLabel(txt, p) {
 
         if (p.fontspecMap[chunkScript]) mappedFont = p.fontspecMap[chunkScript];
         else if (p.font.match(/^Noto/)) {
-            if (notoFontMap[p.font] && notoFontMap[p.font][chunkScript])
-                mappedFont = notoFontMap[p.font][chunkScript];
-            else mappedFont = notoFontMap.general[chunkScript];
+            mappedFont = notoFontMap[p.font] && notoFontMap[p.font][chunkScript]
+                ? notoFontMap[p.font][chunkScript]
+                : notoFontMap.general[chunkScript];
         }
 
         var font = mappedFont || p.font;
 
-        if (font !== lastFont) {
+        if (font !== lastFont || chunkScript !== lastScript) {
             str += '\\setmainfont{'+font+'}';
 
             if (fontspecScriptMap[chunkScript])
                 str += '[Script='+fontspecScriptMap[chunkScript]+']';
 
             lastFont = font;
+            lastScript = chunkScript;
         }
 
         str += escapeLatex(chunk[0]);

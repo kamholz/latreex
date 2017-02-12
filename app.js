@@ -10,8 +10,7 @@ var fs = require('fs');
 var uuid = require('node-uuid');
 
 var config = require('./config');
-var fontspecScriptMap = require('./lib/fontspec');
-var latexLanguageMap = require('./lib/latex');
+var fontspecScriptMap = require('./lib/fontspec_script');
 var latexTemplate = fs.readFileSync(__dirname + '/lib/latex.ejs', 'utf8');
 var notoFontMap = require('./lib/noto');
 var script = require('./lib/script');
@@ -26,18 +25,20 @@ var paramDefaults = {
     orient:     'D',
     style:      'nonflat',
     font:       'noto_sans',
-    arabic:     'Naskh Arabic',
-    cjk:        'SC',
-    syriac:     'Western',
+    arabic:     'naskh',
+    cjk:        'sc',
+    greek:      'noto_sans',
+    syriac:     'western',
 };
 
 var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
-    font:   /^(?:noto_(?:sans|serif|mono)|latex_(?:gfs(?:didot|porson)|times_(?:sf|rm|tt))|arial|times|courier)$/,
-    arabic: /^(?:Kufi Arabic|Naskh Arabic|Nastaliq Urdu)$/,
-    cjk:    /^(?:SC|TC|JP|KR)$/,
-    syriac: /^(?:Western|Eastern|Estrangela)$/,
+    font:   /^(?:noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|arial|times|courier)$/,
+    arabic: /^(?:kufi|naskh|nastaliq)$/,
+    cjk:    /^(?:sc|tc|jp|kr)$/,
+    greek:  /^(?:didot|noto_(?:sans|serif)|porson)$/,
+    syriac: /^(?:western|eastern|estrangela)$/,
 };
 
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
@@ -54,10 +55,22 @@ var orientToRefpoint = {
 var fontMap = {
     arial:      'Arial',
     courier:    'Courier New',
+    didot:      'GFS Didot',
+    eastern:    'Eastern',
+    estrangela: 'Estrangela',
+    jp:         'JP',
+    kr:         'KR',
+    kufi:       'Kufi Arabic',
+    naskh:      'Naskh Arabic',
+    nastaliq:   'Nastaliq Urdu',
     noto_sans:  'Noto Sans',
     noto_serif: 'Noto Serif',
     noto_mono:  'Noto Mono',
+    sc:         'SC',
+    porson:     'GFS Porson',
+    tc:         'TC',
     times:      'Times New Roman',
+    western:    'Western',
 };
 
 if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);
@@ -132,6 +145,7 @@ function makeLatex(req, res, next) {
     }
     else {
         p.font = fontMap[p.font];
+        p.fontspecMap = { greek: fontMap[p.greek] };
         p.latex = false;
     }
 
@@ -238,46 +252,39 @@ function pstNode(p, treeNode, depth) {
 }
 
 function nodeLabel(txt, p) {
-    if (p.font && p.font.match(/^Noto/)) {
-        var str = '';
-        var lastFont;
+    if (p.latex) return escapeLatex(txt);;
 
-        script.split(txt).forEach(function (chunk) {
-            var substituteFont;
-            if (notoFontMap[p.font] && notoFontMap[p.font][chunk[1]])
-                substituteFont = notoFontMap[p.font][chunk[1]];
-            else substituteFont = notoFontMap.general[chunk[1]];
+    var str = '';
+    var lastFont;
 
-            var font = substituteFont || p.font;
+    script.split(txt).forEach(function (chunk) {
+        var chunkScript = chunk[1];
+        var mappedFont;
 
-            if (font !== lastFont) {
-                str += '\\setmainfont{'
-                    + font.replace(/\$([a-z]+)/g, function (match, p1) { return p[p1] })
-                    + '}';
+        if (p.fontspecMap[chunkScript]) mappedFont = p.fontspecMap[chunkScript];
+        else if (p.font.match(/^Noto/)) {
+            if (notoFontMap[p.font] && notoFontMap[p.font][chunkScript])
+                mappedFont = notoFontMap[p.font][chunkScript];
+            else mappedFont = notoFontMap.general[chunkScript];
 
-                if (fontspecScriptMap[chunk[1]])
-                    str += '[Script='+fontspecScriptMap[chunk[1]]+']';
+            if (mappedFont) mappedFont = mappedFont.replace(/\$([a-z]+)/g, function (match, p1) { return fontMap[p[p1]] });
+        }
 
-                lastFont = font;
-            }
+        var font = mappedFont || p.font;
 
-            str += escapeLatex(chunk[0]);
-        });
+        if (font !== lastFont) {
+            str += '\\setmainfont{'+font+'}';
 
-        return str;
-    }
-    else if (p.latex) {
-        var str = '';
+            if (fontspecScriptMap[chunkScript])
+                str += '[Script='+fontspecScriptMap[chunkScript]+']';
 
-        script.split(txt).forEach(function (chunk) {
-            var lang = latexLanguageMap[chunk[1]];
-            if (lang) str +='\\foreignlanguage{'+lang+'}{'+escapeLatex(chunk[0])+'}';
-            else str += escapeLatex(chunk[0]);
-        });
+            lastFont = font;
+        }
 
-        return str;
-    }
-    else return escapeLatex(txt);
+        str += escapeLatex(chunk[0]);
+    });
+
+    return str;
 }
 
 function escapeLatex(txt) {

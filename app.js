@@ -25,7 +25,7 @@ var paramDefaults = {
     orient:     'D',
     style:      'nonflat',
     font:       'noto_sans',
-    arabic:     'naskh',
+    arabic:     'noto_naskh',
     cjk:        'sc',
     greek:      'noto_sans',
     syriac:     'western',
@@ -35,7 +35,7 @@ var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
     font:   /^(?:noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|arial|times|courier)$/,
-    arabic: /^(?:kufi|naskh|nastaliq)$/,
+    arabic: /^(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^(?:sc|tc|jp|kr)$/,
     greek:  /^(?:didot|noto_(?:sans|serif)|porson)$/,
     syriac: /^(?:western|eastern|estrangela)$/,
@@ -53,24 +53,24 @@ var orientToRefpoint = {
 };
 
 var fontMap = {
-    arial:      'Arial',
-    courier:    'Courier New',
-    didot:      'GFS Didot',
-    eastern:    'Eastern',
-    estrangela: 'Estrangela',
-    jp:         'JP',
-    kr:         'KR',
-    kufi:       'Kufi Arabic',
-    naskh:      'Naskh Arabic',
-    nastaliq:   'Nastaliq Urdu',
-    noto_sans:  'Noto Sans',
-    noto_serif: 'Noto Serif',
-    noto_mono:  'Noto Mono',
-    sc:         'SC',
-    porson:     'GFS Porson',
-    tc:         'TC',
-    times:      'Times New Roman',
-    western:    'Western',
+    arial:          'Arial',
+    courier:        'Courier New',
+    didot:          'GFS Didot',
+    eastern:        'Eastern',
+    estrangela:     'Estrangela',
+    jp:             'JP',
+    kr:             'KR',
+    noto_kufi:      'Noto Kufi Arabic',
+    noto_naskh:     'Noto Naskh Arabic',
+    noto_nastaliq:  'Noto Nastaliq Urdu',
+    noto_sans:      'Noto Sans',
+    noto_serif:     'Noto Serif',
+    noto_mono:      'Noto Mono',
+    sc:             'SC',
+    porson:         'GFS Porson',
+    tc:             'TC',
+    times:          'Times New Roman',
+    western:        'Western',
 };
 
 if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);
@@ -145,7 +145,10 @@ function makeLatex(req, res, next) {
     }
     else {
         p.font = fontMap[p.font];
-        p.fontspecMap = { greek: fontMap[p.greek] };
+        p.fontspecMap = {
+            arabic: fontMap[p.arabic],
+            greek: fontMap[p.greek],
+        };
         p.latex = false;
     }
 

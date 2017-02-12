@@ -35,9 +35,9 @@ var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
     font:   /^(?:arial|courier|noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|times)|xcharter$/,
-    arabic: /^(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
+    arabic: /^amiri|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^(?:sc|tc|jp|kr)$/,
-    greek:  /^(?:didot|noop|noto_(?:sans|serif)|porson)$/,
+    greek:  /^(?:didot|neohellenic|noop|noto_(?:sans|serif)|porson)$/,
     syriac: /^(?:western|eastern|estrangela)$/,
 };
 
@@ -53,6 +53,7 @@ var orientToRefpoint = {
 };
 
 var fontMap = {
+    amiri:          'Amiri',
     arial:          'Arial',
     courier:        'Courier New',
     didot:          'GFS Didot',
@@ -60,6 +61,7 @@ var fontMap = {
     estrangela:     'Estrangela',
     jp:             'JP',
     kr:             'KR',
+    neohellenic:    'GFS Neohellenic',
     noto_kufi:      'Noto Kufi Arabic',
     noto_naskh:     'Noto Naskh Arabic',
     noto_nastaliq:  'Noto Nastaliq Urdu',
@@ -147,7 +149,7 @@ function makeLatex(req, res, next) {
     else {
         p.font = fontMap[p.font];
         p.fontspecMap = { arabic: fontMap[p.arabic] };
-        if (p.greek !== 'noop') p.fontSpecMap.greek = p.greek;
+        if (p.greek !== 'noop') p.fontspecMap.greek = fontMap[p.greek];
         p.latex = false;
     }
 

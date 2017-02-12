@@ -19,4 +19,6 @@ RUN /install-tl/install-tl -profile /install-tl/texlive.profile && rm -rf /insta
 
 ENV PATH /usr/local/texlive/2016/bin/x86_64-linux:$PATH
 
-RUN tlmgr install collection-fontsrecommended fontspec gfsdidot gfsporson pgf preview pst-node pst-tools pst-tree pstricks ucs varwidth xcharter xcolor xetex xetex-pstricks xkeyval
+RUN tlmgr install amiri collection-fontsrecommended fontspec gfsdidot gfsneohellenic gfsporson pgf preview pst-node pst-tools pst-tree pstricks ucs varwidth xcharter xcolor xetex xetex-pstricks xkeyval
+
+# apt-get install ttf-mscorefonts-installer

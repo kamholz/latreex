@@ -1,4 +1,4 @@
 latreex
 =======
 
-LaTeX language family tree maker: http://lautgesetz.com/latreex/
+LaTeX tree maker: http://lautgesetz.com/latreex/

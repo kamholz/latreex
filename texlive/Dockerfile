@@ -21,4 +21,4 @@ ENV PATH /usr/local/texlive/2016/bin/x86_64-linux:$PATH
 
 RUN tlmgr install collection-fontsrecommended fontspec pgf preview pst-node pst-tools pst-tree pstricks ucs varwidth xcharter xcolor xetex xetex-pstricks xkeyval
 
-# apt-get install fonts-noto ttf-mscorefonts-installer
+# apt-get install ttf-mscorefonts-installer

@@ -36,9 +36,9 @@ var paramValidate = {
     style:  /^(?:flat|nonflat)$/,
     font:   /^(?:arial|courier|noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|times)|xcharter$/,
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
-    cjk:    /^(?:sc|tc|jp|kr)$/,
+    cjk:    /^noto_(?:sc|tc|jp|kr)$/,
     greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)$/,
-    syriac: /^(?:western|eastern|estrangela)$/,
+    syriac: /^syriac_(?:western|eastern|estrangela)$/,
 };
 
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
@@ -59,23 +59,23 @@ var fontMap = {
     arefruqaa:          'Aref Ruqaa',
     courier:            'Courier New',
     didot:              'GFS DidotClassic',
-    eastern:            'Eastern',
-    estrangela:         'Estrangela',
     hussaini_nastaleeq: 'Hussaini Nastaleeq',
-    jp:                 'JP',
-    kr:                 'KR',
     neohellenic:        'GFS Neohellenic',
+    noto_jp:            'Noto Sans CJK JP',
+    noto_kr:            'Noto Sans CJK KR',
     noto_kufi:          'Noto Kufi Arabic',
+    noto_mono:          'Noto Mono',
     noto_naskh:         'Noto Naskh Arabic',
     noto_nastaliq:      'Noto Nastaliq Urdu',
     noto_sans:          'Noto Sans',
+    noto_sc:            'Noto Sans CJK SC',
     noto_serif:         'Noto Serif',
-    noto_mono:          'Noto Mono',
-    sc:                 'SC',
+    noto_tc:            'Noto Sans CJK TC',
     porson:             'GFS Porson',
-    tc:                 'TC',
+    syriac_eastern:     'Noto Sans Syriac Eastern',
+    syriac_estrangela:  'Noto Sans Syriac Estrangela',
+    syriac_western:     'Noto Sans Syriac Western',
     times:              'Times New Roman',
-    western:            'Western',
     xcharter:           'XCharter',
 };
 
@@ -151,8 +151,17 @@ function makeLatex(req, res, next) {
     }
     else {
         p.font = fontMap[p.font];
-        p.fontspecMap = { arabic: fontMap[p.arabic] };
+
+        p.fontspecMap = {
+            arabic:     fontMap[p.arabic],
+            bopomofo:   fontMap[p.cjk],
+            han:        fontMap[p.cjk],
+            hangul:     fontMap[p.cjk],
+            hiragana:   fontMap[p.cjk],
+            katakana:   fontMap[p.cjk],
+        };
         if (p.greek !== 'noop') p.fontspecMap.greek = fontMap[p.greek];
+
         p.latex = false;
     }
 
@@ -273,8 +282,6 @@ function nodeLabel(txt, p) {
             if (notoFontMap[p.font] && notoFontMap[p.font][chunkScript])
                 mappedFont = notoFontMap[p.font][chunkScript];
             else mappedFont = notoFontMap.general[chunkScript];
-
-            if (mappedFont) mappedFont = mappedFont.replace(/\$([a-z]+)/g, function (match, p1) { return fontMap[p[p1]] });
         }
 
         var font = mappedFont || p.font;

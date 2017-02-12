@@ -15,7 +15,6 @@ append js
       var fontoptVisible = false;
       var fontspec = $('#fontspec');
       var form = $('#form');
-      var noto = $('#noto');
       var previewImage = $('#previewImage');
 
       $('#font').change(function () {
@@ -28,9 +27,6 @@ append js
         else {
           fontopt.toggle(fontoptVisible);
           fontoptToggle.show();
-
-          if (val.match(/^noto/)) noto.show();
-          else noto.hide();
         }
       });
 
@@ -168,20 +164,19 @@ block body
                 option(value='noto_kufi') Noto Kufi Arabic
                 option(value='noto_naskh') Noto Naskh Arabic
                 option(value='noto_nastaliq') Noto Nastaliq Urdu
-            div#noto
-              li Noto CJK:
-              li
-                select(name='cjk')
-                  option(value='jp') Japanese
-                  option(value='kr') Korean
-                  option(value='sc', selected='selected') Simplified Chinese
-                  option(value='tc') Traditional Chinese
-              li Noto Syriac:
-              li
-                select(name='syriac')
-                  option(value='eastern') Eastern
-                  option(value='estrangela') Estrangela
-                  option(value='western', selected='selected') Western
+            li CJK:
+            li
+              select(name='cjk')
+                option(value='noto_jp') Noto Sans CJK JP
+                option(value='noto_kr') Noto Sans CJK KR
+                option(value='noto_sc', selected='selected') Noto Sans CJK SC
+                option(value='noto_tc') Noto Sans CJK TC
+            li Syriac:
+            li
+              select(name='syriac')
+                option(value='syriac_eastern') Noto Sans Syriac Eastern
+                option(value='syriac_estrangela') Noto Sans Syriac Estrangela
+                option(value='syriac_western', selected='selected') Noto Sans Syriac Western
 
     .left
       p Enter tree:

@@ -34,7 +34,7 @@ var paramDefaults = {
 var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
-    font:   /^(?:noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|arial|times|courier)$/,
+    font:   /^(?:arial|courier|noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|times)|xcharter$/,
     arabic: /^(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^(?:sc|tc|jp|kr)$/,
     greek:  /^(?:didot|noto_(?:sans|serif)|porson)$/,
@@ -71,6 +71,7 @@ var fontMap = {
     tc:             'TC',
     times:          'Times New Roman',
     western:        'Western',
+    xcharter:       'XCharter',
 };
 
 if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);

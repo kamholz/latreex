@@ -36,7 +36,7 @@ var paramValidate = {
     style:  /^(?:flat|nonflat)$/,
     font:   /^(?:arial|courier|noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|times)|xcharter$/,
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
-    cjk:    /^noto_(?:sc|tc|jp|kr)$/,
+    cjk:    /^babelstone|noto_(?:sc|tc|jp|kr)$/,
     greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)$/,
     syriac: /^syriac_(?:western|eastern|estrangela)$/,
 };
@@ -57,6 +57,7 @@ var fontMap = {
     amiri:              'Amiri',
     arial:              'Arial',
     arefruqaa:          'Aref Ruqaa',
+    babelstone:         'BabelStone Han',
     courier:            'Courier New',
     didot:              'GFS DidotClassic',
     hussaini_nastaleeq: 'Hussaini Nastaleeq',

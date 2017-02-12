@@ -64,7 +64,7 @@ var fontMap = {
     hussaini_nastaleeq: 'Hussaini Nastaleeq',
     jp:                 'JP',
     kr:                 'KR',
-    neohellenic:        'GFS NeoHellenic',
+    neohellenic:        'GFS Neohellenic',
     noto_kufi:          'Noto Kufi Arabic',
     noto_naskh:         'Noto Naskh Arabic',
     noto_nastaliq:      'Noto Nastaliq Urdu',

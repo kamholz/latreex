@@ -58,7 +58,7 @@ var fontMap = {
     arial:              'Arial',
     arefruqaa:          'Aref Ruqaa',
     courier:            'Courier New',
-    didot:              'GFS Didot Classic',
+    didot:              'GFS DidotClassic',
     eastern:            'Eastern',
     estrangela:         'Estrangela',
     hussaini_nastaleeq: 'Hussaini Nastaleeq',

@@ -37,7 +37,7 @@ var paramValidate = {
     font:   /^(?:arial|courier|noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|times)|xcharter$/,
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^babelstone|noto_(?:sc|tc|jp|kr)$/,
-    greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)$/,
+    greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)|times$/,
     syriac: /^syriac_(?:western|eastern|estrangela)$/,
 };
 

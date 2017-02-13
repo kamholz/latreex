@@ -4,6 +4,8 @@
     "arial":                "Arial",
     "arefruqaa":            "Aref Ruqaa",
     "babelstone":           "BabelStone Han",
+    "charter":              "Charter",
+    "charis":               "Charis SIL",
     "courier":              "Courier New",
     "didot":                "GFS DidotClassic",
     "hussaini_nastaleeq":   "Hussaini Nastaleeq",
@@ -22,6 +24,5 @@
     "syriac_eastern":       "Noto Sans Syriac Eastern",
     "syriac_estrangela":    "Noto Sans Syriac Estrangela",
     "syriac_western":       "Noto Sans Syriac Western",
-    "times":                "Times New Roman",
-    "xcharter":             "XCharter"
+    "times":                "Times New Roman"
 }

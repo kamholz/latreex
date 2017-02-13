@@ -123,11 +123,11 @@ function makeLatex(req, res, next) {
     else {
         p.font = fontMap[p.font];
 
-        p.fontspecMap = { arabic: fontMap[p.arabic], syriac: fontMap[p.syriac] };
-        ['bopomofo','han','hangul','hiragana','katakana'].forEach(function (i) {
+        p.fontspecMap = { Arabic: fontMap[p.arabic], Syriac: fontMap[p.syriac] };
+        ['Bopomofo','Han','Hangul','Hiragana','Katakana'].forEach(function (i) {
             p.fontspecMap[i] = fontMap[p.cjk];
         });
-        if (p.greek !== 'noop') p.fontspecMap.greek = fontMap[p.greek];
+        if (p.greek !== 'noop') p.fontspecMap.Greek = fontMap[p.greek];
 
         p.latex = false;
     }

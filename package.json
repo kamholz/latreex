@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "body-parser": "^1.9.0",
+    "deep-equal": "^1.0.1",
     "ejs": "^1.0.0",
     "errorhandler": "^1.2.0",
     "express": "^4.9.7",
@@ -19,8 +20,8 @@
     "morgan": "^1.3.2",
     "punycode": "^2.1.0",
     "stylus": "^0.49.1",
-    "uuid": "^3.0.1",
-    "xregexp": "^3.1.1"
+    "unicode-9.0.0": "^0.7.0",
+    "uuid": "^3.0.1"
   },
   "scripts": {
     "start": "node app.js"

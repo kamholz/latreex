@@ -254,7 +254,7 @@ function nodeLabel(txt, p) {
         var font = mappedFont || p.font;
 
         if (font !== lastFont || chunkScript !== lastScript) {
-            str += '\\setmainfont{'+font+'}';
+            str += '\\fontspec{'+font+'}';
 
             if (fontspecScriptMap[chunkScript])
                 str += '[Script='+fontspecScriptMap[chunkScript]+']';

@@ -28,8 +28,13 @@ append js
       });
 
       $('#fontoptToggle a').click(function () {
-        console.log($(this).data('div'));
-        $('#' + $(this).data('div')).toggle();
+        var el = $(this);
+        var target = $('#' + el.data('div'));
+
+        target.toggle();
+
+        if (target.css('display') === 'none') el.css('font-weight', 'normal');
+        else el.css('font-weight', 'bold');
       });
 
       $('#preview').click(function () {

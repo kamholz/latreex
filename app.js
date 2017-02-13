@@ -123,7 +123,7 @@ function makeLatex(req, res, next) {
     else {
         p.font = fontMap[p.font];
 
-        p.fontspecMap = { arabic: fontMap[p.arabic] };
+        p.fontspecMap = { arabic: fontMap[p.arabic], syriac: fontMap[p.syriac] };
         ['bopomofo','han','hangul','hiragana','katakana'].forEach(function (i) {
             p.fontspecMap[i] = fontMap[p.cjk];
         });

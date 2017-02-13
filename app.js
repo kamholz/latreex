@@ -26,9 +26,9 @@ var paramDefaults = {
     style:      'nonflat',
     font:       'noto_sans',
     arabic:     'noto_naskh',
-    cjk:        'sc',
+    cjk:        'noto_sc',
     greek:      'noop',
-    syriac:     'western',
+    syriac:     'syriac_western',
 };
 
 var paramValidate = {
@@ -36,7 +36,7 @@ var paramValidate = {
     style:  /^(?:flat|nonflat)$/,
     font:   /^(?:arial|charis|charter|courier|noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|palatino|schoolbook|times)$/,
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
-    cjk:    /^babelstone|kaiti|noto_(?:sc|tc|jp|kr)$/,
+    cjk:    /^adobe_kaiti|babelstone|noto_(?:sc|tc|jp|kr)|stkaiti$/,
     greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)|times$/,
     syriac: /^syriac_(?:western|eastern|estrangela)$/,
 };

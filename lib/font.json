@@ -1,4 +1,5 @@
 {
+    "adobe_kaiti":          "Adobe Kaiti Std",
     "alfios":               "Alfios",
     "amiri":                "Amiri",
     "arial":                "Arial",
@@ -9,7 +10,6 @@
     "courier":              "Courier New",
     "didot":                "GFS DidotClassic",
     "hussaini_nastaleeq":   "Hussaini Nastaleeq",
-    "kaiti":                "Adobe Kaiti Std",
     "neohellenic":          "GFS Neohellenic",
     "noto_jp":              "Noto Sans CJK JP",
     "noto_kr":              "Noto Sans CJK KR",

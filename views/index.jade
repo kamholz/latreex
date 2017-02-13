@@ -9,15 +9,12 @@ append js
       var height = $('#tooltip').innerHeight();
       $('img.tooltip').tooltip({ showURL: false, top: -height, left: 20 });
 
-      var font = $('#font');
       var fontopt = $('#fontopt');
       var fontoptToggle = $('#fontoptToggle');
-      var fontoptVisible = false;
-      var fontspec = $('#fontspec');
       var form = $('#form');
       var previewImage = $('#previewImage');
 
-      $('#font').change(function () {
+      $('#fontselect').change(function () {
         var val = $(this).val();
 
         if ($(this).val().match(/^latex/)) {
@@ -25,17 +22,14 @@ append js
           fontoptToggle.hide();
         }
         else {
-          fontopt.toggle(fontoptVisible);
+          fontopt.show();
           fontoptToggle.show();
         }
       });
 
-      $('#fontoptToggle').click(function () {
-        fontopt.toggle();
-        fontoptVisible = !fontoptVisible;
-
-        if (fontoptVisible) $(this).html('Hide Font Options');
-        else $(this).html('Show Font Options');
+      $('#fontoptToggle a').click(function () {
+        console.log($(this).data('div'));
+        $('#' + $(this).data('div')).toggle();
       });
 
       $('#preview').click(function () {
@@ -124,11 +118,11 @@ block body
             input#orient_U(type='radio',name='orient',value='U',tabindex=11)
             label(for='orient_U') Bottom to top
 
-      .rowform.left
-        ul.select
+      .rowform.left#font
+        ul
           li Font:
           li
-            select#font(name='font')
+            select#fontselect(name='font')
               option(value='arial') Arial
               option(value='schoolbook') Century Schoolbook
               option(value='charis') Charis SIL
@@ -143,47 +137,58 @@ block body
               option(value='noto_serif') Noto Serif
               option(value='palatino') Palatino
               option(value='times') Times
-            li
-              button#fontoptToggle(type='button') Show Font Options
+          li#fontoptToggle
+            | Script font overrides: 
+            a(data-div='arabic', href='javascript:void(0)') Arabic
+            | , 
+            a(data-div='cjk', href='javascript:void(0)') CJK
+            | , 
+            a(data-div='greek', href='javascript:void(0)') Greek
+            | , 
+            a(data-div='syriac', href='javascript:void(0)') Syriac
         div#fontopt
-          ul.select
-            li Arabic:
-            li
-              select(name='arabic')
-                option(value='amiri', selected='selected') Amiri
-                option(value='arefruqaa') Aref Ruqaa
-                option(value='hussaini_nastaleeq') Hussaini Nastaleeq
-                option(value='noto_kufi') Noto Kufi Arabic
-                option(value='noto_naskh') Noto Naskh Arabic
-                option(value='noto_nastaliq') Noto Nastaliq Urdu
-            li CJK:
-            li
-              select(name='cjk')
-                option(value='adobe_kaiti') Adobe Kaiti Std
-                option(value='babelstone') BabelStone Han
-                option(value='noto_jp') Noto Sans CJK JP
-                option(value='noto_kr') Noto Sans CJK KR
-                option(value='noto_sc', selected='selected') Noto Sans CJK SC
-                option(value='noto_tc') Noto Sans CJK TC
-                option(value='stkaiti') STKaiti
-            li Greek:
-            li
-              select(name='greek')
-                option(value='noop', selected='selected') (same)
-                option(value='alfios') Alfios
-                option(value='didot') GFS Didot Classic
-                option(value='neohellenic') GFS NeoHellenic
-                option(value='porson') GFS Porson
-                option(value='noto_mono') Noto Mono
-                option(value='noto_sans') Noto Sans
-                option(value='noto_serif') Noto Serif
-                option(value='times') Times
-            li Syriac:
-            li
-              select(name='syriac')
-                option(value='syriac_eastern') Noto Sans Syriac Eastern
-                option(value='syriac_estrangela') Noto Sans Syriac Estrangela
-                option(value='syriac_western', selected='selected') Noto Sans Syriac Western
+          ul
+            div#arabic
+              li Arabic:
+              li
+                select(name='arabic')
+                  option(value='amiri', selected='selected') Amiri
+                  option(value='arefruqaa') Aref Ruqaa
+                  option(value='hussaini_nastaleeq') Hussaini Nastaleeq
+                  option(value='noto_kufi') Noto Kufi Arabic
+                  option(value='noto_naskh') Noto Naskh Arabic
+                  option(value='noto_nastaliq') Noto Nastaliq Urdu
+            div#cjk
+              li CJK:
+              li
+                select(name='cjk')
+                  option(value='adobe_kaiti') Adobe Kaiti Std
+                  option(value='babelstone') BabelStone Han
+                  option(value='noto_jp') Noto Sans CJK JP
+                  option(value='noto_kr') Noto Sans CJK KR
+                  option(value='noto_sc', selected='selected') Noto Sans CJK SC
+                  option(value='noto_tc') Noto Sans CJK TC
+                  option(value='stkaiti') STKaiti
+            div#greek
+              li Greek:
+              li
+                select(name='greek')
+                  option(value='noop', selected='selected') (same)
+                  option(value='alfios') Alfios
+                  option(value='didot') GFS Didot Classic
+                  option(value='neohellenic') GFS NeoHellenic
+                  option(value='porson') GFS Porson
+                  option(value='noto_mono') Noto Mono
+                  option(value='noto_sans') Noto Sans
+                  option(value='noto_serif') Noto Serif
+                  option(value='times') Times
+            div#syriac
+              li Syriac:
+              li
+                select(name='syriac')
+                  option(value='syriac_eastern') Noto Sans Syriac Eastern
+                  option(value='syriac_estrangela') Noto Sans Syriac Estrangela
+                  option(value='syriac_western', selected='selected') Noto Sans Syriac Western
 
     .left
       p Enter tree:

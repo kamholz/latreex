@@ -9,8 +9,10 @@ mkdir -p /usr/local/share/fonts/opentype/noto
 mkdir -p /usr/local/share/fonts/truetype/noto
 
 cd noto
+wget https://noto-website-2.storage.googleapis.com/pkgs/Noto-unhinted.zip
 wget https://noto-website-2.storage.googleapis.com/pkgs/Noto-hinted.zip
-unzip Noto-hinted.zip
+unzip -o Noto-unhinted.zip
+unzip -o Noto-hinted.zip
 chmod 644 *
 mv *.otf /usr/local/share/fonts/opentype/noto
 mv *.ttf /usr/local/share/fonts/truetype/noto

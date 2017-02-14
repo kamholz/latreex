@@ -115,6 +115,7 @@ block body
             select#fontselect(name='font')
               option(value='arial') Arial
               option(value='bookman') Bookman
+              option(value='cardo') Cardo
               option(value='schoolbook') Century Schoolbook
               option(value='charis') Charis SIL
               option(value='charter') Charter
@@ -135,6 +136,8 @@ block body
             a(data-div='cjk', href='javascript:void(0)') CJK
             | , 
             a(data-div='greek', href='javascript:void(0)') Greek
+            | , 
+            a(data-div='hebrew', href='javascript:void(0)') Hebrew
             | , 
             a(data-div='syriac', href='javascript:void(0)') Syriac
         div#fontopt
@@ -173,6 +176,16 @@ block body
                   option(value='noto_sans') Noto Sans
                   option(value='noto_serif') Noto Serif
                   option(value='times_mac') Times
+            div#hebrew
+              li Hebrew:
+              li
+                select(name='hebrew')
+                  option(value='cardo') Cardo
+                  option(value='david') David CLM
+                  option(value='ezra') Ezra SIL
+                  option(value='mekorot_rashi') Mekorot Rashi
+                  option(value='mekorot_vilna') Mekorot Vilna
+                  option(value='noto_hebrew', selected='selected') Noto Sans
             div#syriac
               li Syriac:
               li

@@ -97,23 +97,23 @@ block body
         ul
           li
             label.wide Space between sibling nodes:
-            input(type='text',name='treesep',tabindex=1,value='4ex',size=6,maxlength=6)
+            input(type='text',name='treesep',value='4ex',size=6,maxlength=6,tabindex=1)
             img.tooltip(src='#{basepath}images/question.png',title='Space between daughters of the same parent, e.g., <i>Baltic</i> and <i>Slavic</i>')
           li
             label.wide Parent to daughter length:
-            input(type='text',name='levelsep',tabindex=2,value='2cm',size=6,maxlength=6)
+            input(type='text',name='levelsep',value='2cm',size=6,maxlength=6,tabindex=2)
             img.tooltip(src='#{basepath}images/question.png',title='Length between parents and daughters, e.g., <i>Balto-Slavic</i> and <i>Baltic</i>')
           li
             label.wide Maximum node label width:
-            input(type='text',name='LFTwidth',tabindex=3,value='15ex',size=6,maxlength=6)
+            input(type='text',name='LFTwidth',value='15ex',size=6,maxlength=6,tabindex=3)
             img.tooltip(src='#{basepath}images/question.png',title='Maximum width of node labels (language/family names) before wrapping to another line<br>(can be overridden for an individual label by appending ~ to it)')
           li
             label.wide Node label padding:
-            input(type='text',name='LFTsep',tabindex=4,value='4pt',size=6,maxlength=6)
+            input(type='text',name='LFTsep',value='4pt',size=6,maxlength=6,tabindex=4)
             img.tooltip(src='#{basepath}images/question.png',title='Whitespace padding/cushion around node labels (language/family names)')
           li
             label.wide Line thickness:
-            input(type='text',name='linewidth',tabindex=5,value='0.3pt',size=6,maxlength=6)
+            input(type='text',name='linewidth',value='0.3pt',size=6,maxlength=6,tabindex=5)
             img.tooltip(src='#{basepath}images/question.png',title='Thickness of lines connecting nodes')
 
       .rowform.left
@@ -121,10 +121,10 @@ block body
           li Style:
             img.tooltip(src='#{basepath}images/question.png',title='In non-flat trees, parent and daughter nodes are always the same distance apart.<br>In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other.<br>The flat style is generally only practical for smaller trees.')
           li
-            input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=7)
+            input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=6)
             label(for='style_nonflat') Non-flat
           li
-            input#style_flat(type='radio',name='style',value='flat',tabindex=6)
+            input#style_flat(type='radio',name='style',value='flat',tabindex=7)
             label(for='style_flat') Flat
 
       .rowform.left
@@ -147,7 +147,7 @@ block body
         ul
           li Font:
           li
-            select#fontselect(name='font')
+            select#fontselect(name='font',tabindex=12)
               option(value='arial') Arial
               option(value='bookman') Bookman
               option(value='schoolbook') Century Schoolbook
@@ -182,12 +182,12 @@ block body
           ul
             #ligatures
               li.checkbox
-                input#ligaturesinput(type='checkbox',name='ligatures',value='1')
+                input#ligaturesinput(type='checkbox',name='ligatures',value='1',tabindex=13)
                 label(for='ligaturesinput') Extra Ligatures
             #arabic
               li Arabic:
               li
-                select(name='arabic')
+                select(name='arabic',tabindex=14)
                   option(value='noop') (no override)
                   option(value='amiri', selected='selected') Amiri
                   option(value='arefruqaa') Aref Ruqaa
@@ -198,7 +198,7 @@ block body
             #cjk
               li CJK:
               li
-                select(name='cjk')
+                select(name='cjk',tabindex=15)
                   option(value='noop') (no override)
                   option(value='adobe_kaiti') Adobe Kaiti Std
                   option(value='babelstone') BabelStone Han
@@ -210,7 +210,7 @@ block body
             #greek
               li Greek:
               li
-                select(name='greek')
+                select(name='greek',tabindex=16)
                   option(value='noop', selected='selected') (no override)
                   option(value='alfios') Alfios
                   option(value='didot') GFS Didot Classic
@@ -223,7 +223,7 @@ block body
             #hebrew
               li Hebrew:
               li
-                select(name='hebrew')
+                select(name='hebrew',tabindex=17)
                   option(value='noop') (no override)
                   option(value='cardo') Cardo
                   option(value='david') David CLM
@@ -234,7 +234,7 @@ block body
             #syriac
               li Syriac:
               li
-                select(name='syriac')
+                select(name='syriac',tabindex=18)
                   option(value='noop') (no override)
                   option(value='syriac_eastern') Noto Sans Syriac Eastern
                   option(value='syriac_estrangela', selected='selected') Noto Sans Syriac Estrangela
@@ -243,7 +243,7 @@ block body
     .left
       p Enter tree:
         img.tooltip(src='#{basepath}images/question.png',title='Enter one node (e.g., language or family name) per line.<br>The first line contains the root node; subsequent lines contain child nodes.<br>Embedding is indicated with the appropriate number of dashes (-).<br>For an unlabeled node, use a dot (.).<br>To force a label not to wrap across lines, append ~.<br>To push a node up on a flat-style tree, append one ^ for each level (after ~, if present).<br>Styles are available as *bold* and _italic_.')
-      textarea(name='tree',tabindex=15,rows=18,cols=40)
+      textarea(name='tree',rows=18,cols=40,tabindex=20)
         | Proto-Indo-European~
         | -Balto-Slavic~
         | --Baltic
@@ -264,11 +264,11 @@ block body
 
   .clearfix
   #buttons
-    button#preview Preview Tree
-    button#latex Download LaTeX source
-    button#pdf Download PDF
-    button#copytree Copy Tree
-    button#pastetree Paste Tree
+    button#preview(tabindex=21) Preview Tree
+    button#latex(tabindex=22) Download LaTeX source
+    button#pdf(tabindex=23) Download PDF
+    button#copytree(tabindex=24) Copy Tree
+    button#pastetree(tabindex=25) Paste Tree
 
   #previewimage
 

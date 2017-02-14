@@ -35,11 +35,11 @@ var paramDefaults = {
 var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
-    font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|helvetica|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
+    font:   /^(?:arial|bookman|charis|charter|cm|courier|courier_new|helvetica|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^adobe_kaiti|babelstone|noto_(?:sc|tc|jp|kr)|stkaiti$/,
     greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)|times$/,
-    hebrew: /^(?:cardo|david|ezra|mekorot_(?:rashi|vilna)|noto_hebrew)$/,
+    hebrew: /^(?:david|ezra|mekorot_(?:rashi|vilna)|noto_hebrew)$/,
     syriac: /^syriac_(?:eastern|estrangela|western)$/,
 };
 

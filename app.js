@@ -40,7 +40,7 @@ var paramDefaults = {
 var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
-    font:   /^(?:arial|bookman|charis|charter|cm|courier|courier_new|helvetica|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
+    font:   /^(?:arial|bookman|charis|charter|cm|courier|courier_new|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^adobe_kaiti|babelstone|noop|noto_(?:sc|tc|jp|kr)|stkaiti$/,
     greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)|times$/,

@@ -43,10 +43,13 @@ append js
 
           for (var i in json) {
             var elt = form.find('[name='+i+']');
-            if (!elt.size()) throw 'not found';
 
-            if (elt.size() > 1) elt.val([json[i]]);
-            else elt.val(json[i]);
+            if (!elt.size()) throw 'not found';
+            else if (elt.size() > 1) elt.val([json[i]]);
+            else {
+              if (elt.is('input[type="checkbox"]')) elt.prop('checked', json[i] ? true : false);
+              else elt.val(json[i]);
+            }
           }
 
           previewimage.html('tree loaded successfully');
@@ -57,8 +60,13 @@ append js
 
       $('#copytree').click(function () {
         var p = {};
+
         $.each(form.serializeArray(), function (i, field) {
           p[field.name] = field.value;
+        });
+
+        form.find('input[type="checkbox"]').each(function () {
+          if (!this.checked) p[this.name] = 0;
         });
 
         copyarea.val(JSON.stringify(p, Object.keys(p).sort()));
@@ -157,6 +165,9 @@ block body
               option(value='palatino') Palatino
               option(value='times') Times
               option(value='times_mac') Times (Mac)
+          li.checkbox
+            input#ligatures(type='checkbox',name='ligatures',value='1')
+            label(for='ligatures') Extra Ligatures
           li#fontoptToggle
             | Script font overrides: 
             a(data-div='arabic', href='javascript:void(0)') Arabic

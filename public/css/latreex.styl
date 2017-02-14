@@ -30,6 +30,17 @@ h1
 i
   font-style italic
 
+input[type='checkbox']
+  vertical-align middle
+  margin-right 1ex
+
+label
+  vertical-align middle
+
+textarea
+  font-family monospace
+  margin-top 1em
+
 .clearfix
   clear both
 
@@ -46,7 +57,7 @@ i
   &:hover
     cursor pointer
 
-#tooltip {
+#tooltip
 	position absolute
 	z-index 9999
 	border-radius(8px)
@@ -55,7 +66,6 @@ i
 	padding 10px
 	font-size 85%
 	line-height 1.25
-}
 
 .rowform
   ul
@@ -73,10 +83,8 @@ i
     margin-right 1ex
   button
     margin-bottom 1em
-
-textarea
-  font-family monospace
-  margin-top 1em
+  .checkbox
+    margin-bottom 1ex
 
 #space
   margin-bottom 1.5em
@@ -105,7 +113,7 @@ textarea
     text-decoration none
 
 #fontselect
-  margin-bottom: 1em
+  margin-bottom 1em
 
 #copyarea
   position fixed

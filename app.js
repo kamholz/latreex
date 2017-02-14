@@ -28,7 +28,7 @@ var paramDefaults = {
     arabic:     'noto_naskh',
     cjk:        'noto_sc',
     greek:      'noop',
-    syriac:     'syriac_western',
+    syriac:     'syriac_estrangela',
 };
 
 var paramValidate = {
@@ -38,7 +38,7 @@ var paramValidate = {
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^adobe_kaiti|babelstone|noto_(?:sc|tc|jp|kr)|stkaiti$/,
     greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)|times$/,
-    syriac: /^syriac_(?:western|eastern|estrangela)$/,
+    syriac: /^syriac_(?:eastern|estrangela|western)$/,
 };
 
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {

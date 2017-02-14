@@ -143,8 +143,6 @@ function makeLatex(req, res, next) {
         }
     });
 
-    console.log(p.fontspecMap);
-
     p.refpoint = orientToRefpoint[p.orient];
     p.tree = parseTree(p.tree.split(/\r\n/))[0];
     p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };

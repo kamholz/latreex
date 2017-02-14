@@ -5,10 +5,14 @@
     "arial":                "Arial",
     "arefruqaa":            "Aref Ruqaa",
     "babelstone":           "BabelStone Han",
+    "bookman":              "TeX Gyre Bonum",
     "charter":              "Charter",
     "charis":               "Charis SIL",
-    "courier":              "Courier New",
+    "cm":                   "CMU Serif",
+    "courier":              "TeX Gyre Cursor",
+    "courier_new":          "Courier New",
     "didot":                "GFS DidotClassic",
+    "helvetica":            "TeX Gyre Heros",
     "hussaini_nastaleeq":   "Hussaini Nastaleeq",
     "neohellenic":          "GFS Neohellenic",
     "noto_jp":              "Noto Sans CJK JP",
@@ -28,5 +32,6 @@
     "syriac_eastern":       "Noto Sans Syriac Eastern",
     "syriac_estrangela":    "Noto Sans Syriac Estrangela",
     "syriac_western":       "Noto Sans Syriac Western",
-    "times":                "Times"
+    "times":                "TeX Gyre Termes",
+    "times_mac":            "Times"
 }

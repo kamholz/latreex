@@ -34,7 +34,7 @@ var paramDefaults = {
 var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
-    font:   /^(?:arial|charis|charter|courier|noto_(?:sans|serif|mono)|latex_(?:cmsuper|times_(?:sf|rm|tt))|palatino|schoolbook|times)$/,
+    font:   /^(?:arial|bookman|charis|charter|cm|courier|courier_new|helvetica|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
     cjk:    /^adobe_kaiti|babelstone|noto_(?:sc|tc|jp|kr)|stkaiti$/,
     greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)|times$/,
@@ -115,28 +115,17 @@ function makeLatex(req, res, next) {
 
     p.json = JSON.stringify(p, Object.keys(p).sort());
 
-    var captures = p.font.match(/^latex_([a-z]+)(?:_([a-z]+))?$/);
-    if (captures) {
-        p.latex = captures[1];
-        p.font = captures[2];
-    }
-    else {
-        p.font = fontMap[p.font];
+    p.font = fontMap[p.font];
 
-        p.fontspecMap = {
-            Arabic: fontMap[p.arabic],
-            Emoji:  'Noto Emoji',
-            Syriac: fontMap[p.syriac],
-        };
-
-        ['Bopomofo','Han','Hangul','Hiragana','Katakana'].forEach(function (i) {
-            p.fontspecMap[i] = fontMap[p.cjk];
-        });
-
-        if (p.greek !== 'noop') p.fontspecMap.Greek = fontMap[p.greek];
-
-        p.latex = false;
-    }
+    p.fontspecMap = {
+        Arabic: fontMap[p.arabic],
+        Emoji:  'Noto Emoji',
+        Syriac: fontMap[p.syriac],
+    };
+    ['Bopomofo','Han','Hangul','Hiragana','Katakana'].forEach(function (i) {
+        p.fontspecMap[i] = fontMap[p.cjk];
+    });
+    if (p.greek !== 'noop') p.fontspecMap.Greek = fontMap[p.greek];
 
     p.refpoint = orientToRefpoint[p.orient];
     p.tree = parseTree(p.tree.split(/\r\n/))[0];
@@ -241,8 +230,6 @@ function pstNode(p, treeNode, depth) {
 }
 
 function nodeLabel(txt, p) {
-    if (p.latex) return escapeLatex(txt);;
-
     var str = '';
     var lastFont, lastScript;
 

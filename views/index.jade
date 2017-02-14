@@ -9,8 +9,9 @@ append js
       var height = $('#tooltip').innerHeight();
       $('img.tooltip').tooltip({ showURL: false, top: -height, left: 20 });
 
+      var copyarea = $('#copyarea');
       var form = $('#form');
-      var previewImage = $('#previewImage');
+      var previewimage = $('#previewimage');
 
       $('#fontoptToggle a').click(function () {
         var el = $(this);
@@ -23,25 +24,51 @@ append js
       });
 
       $('#preview').click(function () {
-        previewImage.html('Loading preview...');
+        previewimage.html('Loading preview...');
         $.post(basepath+'png', $('#form').serializeArray(), function (data) {
-          previewImage.html('');
-          previewImage.append($("<img />").attr('src', basepath+'png/'+data.id));
+          previewimage.html('');
+          previewimage.append($("<img />").attr('src', basepath+'png/'+data.id));
         });
       });
 
       $('#latex').click(function () { downloadFile('tex') });
       $('#pdf').click(function () { downloadFile('pdf') });
 
-      $('#template').click(function () {
-        var json = prompt("Paste the indicated line from the LaTeX source:");
-        if (!json) return;
-        json = $.parseJSON(json.trim().replace(/^%\s*/,''));
+      $('#pastetree').click(function () {
+        var json = prompt("Paste the tree info here:");
+        if (json === null) return;
 
-        for (var i in json) {
-          var elt = form.find('[name='+i+']');
-          if (elt.size() > 1) elt.val([json[i]]);
-          else elt.val(json[i]);
+        try {
+          json = $.parseJSON(json.trim().replace(/^%\s*/,''));
+
+          for (var i in json) {
+            var elt = form.find('[name='+i+']');
+            if (!elt.size()) throw 'not found';
+
+            if (elt.size() > 1) elt.val([json[i]]);
+            else elt.val(json[i]);
+          }
+
+          previewimage.html('tree loaded successfully');
+        } catch (e) {
+          previewimage.html('invalid tree, could not load');
+        }
+      });
+
+      $('#copytree').click(function () {
+        var p = {};
+        $.each(form.serializeArray(), function (i, field) {
+          p[field.name] = field.value;
+        });
+
+        copyarea.val(JSON.stringify(p, Object.keys(p).sort()));
+        copyarea.select();
+
+        try {
+          document.execCommand('copy');
+          previewimage.html('tree copied to clipboard');
+        } catch (e) {
+          previewimage.html('could not copy tree to clipboard');        
         }
       });
     });
@@ -108,7 +135,7 @@ block body
             input#orient_U(type='radio',name='orient',value='U',tabindex=11)
             label(for='orient_U') Bottom to top
 
-      .rowform.left#font
+      #font.rowform.left
         ul
           li Font:
           li
@@ -139,9 +166,9 @@ block body
             a(data-div='hebrew', href='javascript:void(0)') Hebrew
             | , 
             a(data-div='syriac', href='javascript:void(0)') Syriac
-        div#fontopt
+        #fontopt
           ul
-            div#arabic
+            #arabic
               li Arabic:
               li
                 select(name='arabic')
@@ -152,7 +179,7 @@ block body
                   option(value='noto_kufi') Noto Kufi Arabic
                   option(value='noto_naskh') Noto Naskh Arabic
                   option(value='noto_nastaliq') Noto Nastaliq Urdu
-            div#cjk
+            #cjk
               li CJK:
               li
                 select(name='cjk')
@@ -164,7 +191,7 @@ block body
                   option(value='noto_sc', selected='selected') Noto Sans CJK SC
                   option(value='noto_tc') Noto Sans CJK TC
                   option(value='stkaiti') STKaiti
-            div#greek
+            #greek
               li Greek:
               li
                 select(name='greek')
@@ -177,7 +204,7 @@ block body
                   option(value='noto_sans') Noto Sans
                   option(value='noto_serif') Noto Serif
                   option(value='times_mac') Times (Mac)
-            div#hebrew
+            #hebrew
               li Hebrew:
               li
                 select(name='hebrew')
@@ -187,7 +214,7 @@ block body
                   option(value='mekorot_rashi') Mekorot Rashi
                   option(value='mekorot_vilna') Mekorot Vilna
                   option(value='noto_hebrew', selected='selected') Noto Sans Hebrew
-            div#syriac
+            #syriac
               li Syriac:
               li
                 select(name='syriac')
@@ -199,7 +226,7 @@ block body
     .left
       p Enter tree:
         img.tooltip(src='#{basepath}images/question.png',title='Enter one node (e.g., language or family name) per line.<br>The first line contains the root node; subsequent lines contain child nodes.<br>Embedding is indicated with the appropriate number of dashes (-).<br>For an unlabeled node, use a dot (.).<br>To force a label not to wrap across lines, append ~.<br>To push a node up on a flat-style tree, append one ^ for each level (after ~, if present).<br>Styles are available as *bold* and _italic_.')
-      textarea(name="tree",tabindex=15,rows=18,cols=40)
+      textarea(name='tree',tabindex=15,rows=18,cols=40)
         | Proto-Indo-European~
         | -Balto-Slavic~
         | --Baltic
@@ -223,6 +250,9 @@ block body
     button#preview Preview Tree
     button#latex Download LaTeX source
     button#pdf Download PDF
-    button#template Paste Template
+    button#copytree Copy Tree
+    button#pastetree Paste Tree
 
-  #previewImage
+  #previewimage
+
+  textarea#copyarea

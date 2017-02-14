@@ -4,6 +4,7 @@ MAINTAINER David Kamholz <lautgesetz@gmail.com>
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
         ghostscript \
+        netpbm \
         perl-modules \
         poppler-utils \
         wget \

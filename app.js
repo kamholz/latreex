@@ -17,8 +17,8 @@ var notoFontMap = require('./lib/noto');
 var rtl = {};
 var script = require('./lib/script');
 
-require('./lib/rtl').forEach(function (script) {
-    rtl[script] = true;
+require('./lib/rtl').forEach(function (sc) {
+    rtl[sc] = true;
 });
 
 var paramDefaults = {
@@ -41,16 +41,24 @@ var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
     font:   /^(?:arial|bookman|charis|charter|cm|courier|courier_new|helvetica|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
-    arabic: /^amiri|arefruqaa|hussaini_nastaleeq|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
-    cjk:    /^adobe_kaiti|babelstone|noto_(?:sc|tc|jp|kr)|stkaiti$/,
+    arabic: /^amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
+    cjk:    /^adobe_kaiti|babelstone|noop|noto_(?:sc|tc|jp|kr)|stkaiti$/,
     greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)|times$/,
-    hebrew: /^(?:david|ezra|mekorot_(?:rashi|vilna)|noto_hebrew)$/,
-    syriac: /^syriac_(?:eastern|estrangela|western)$/,
+    hebrew: /^(?:david|ezra|mekorot_(?:rashi|vilna)|noop|noto_hebrew)$/,
+    syriac: /^noop|syriac_(?:eastern|estrangela|western)$/,
 };
 
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
     paramValidate[p] = /^(?:[0-9]+)?\.?[0-9]+(?:in|mm|cm|pt|em|ex|pc|bp|dd|cc|sp)$/;
 });
+
+var paramScriptMap = {
+    arabic: ['Arabic'],
+    cjk:    ['Bopomofo','Han','Hangul','Hiragana','Katakana'],
+    greek:  ['Greek'],
+    hebrew: ['Hebrew'],
+    syriac: ['Syriac'],
+};
 
 var orientToRefpoint = {
     D: 't',
@@ -124,16 +132,18 @@ function makeLatex(req, res, next) {
 
     p.font = fontMap[p.font];
 
-    p.fontspecMap = {
-        Arabic: fontMap[p.arabic],
-        Emoji:  'Noto Emoji',
-        Hebrew: fontMap[p.hebrew],
-        Syriac: fontMap[p.syriac],
-    };
-    ['Bopomofo','Han','Hangul','Hiragana','Katakana'].forEach(function (i) {
-        p.fontspecMap[i] = fontMap[p.cjk];
+    p.fontspecMap = { Emoji:  'Noto Emoji' };
+
+    ['arabic','cjk','greek','hebrew','syriac'].forEach(function (param) {
+        if (p[param] !== 'noop') {
+            var font = fontMap[p[param]];
+            paramScriptMap[param].forEach(function (sc) {
+                p.fontspecMap[sc] = font;
+            });
+        }
     });
-    if (p.greek !== 'noop') p.fontspecMap.Greek = fontMap[p.greek];
+
+    console.log(p.fontspecMap);
 
     p.refpoint = orientToRefpoint[p.orient];
     p.tree = parseTree(p.tree.split(/\r\n/))[0];

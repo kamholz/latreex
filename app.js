@@ -14,7 +14,12 @@ var fontMap = require('./lib/font');
 var fontspecScriptMap = require('./lib/fontspec_script');
 var latexTemplate = fs.readFileSync(__dirname + '/lib/latex.ejs', 'utf8');
 var notoFontMap = require('./lib/noto');
+var rtl = {};
 var script = require('./lib/script');
+
+require('./lib/rtl').forEach(function (script) {
+    rtl[script] = true;
+});
 
 var paramDefaults = {
     linewidth:  '0.3pt',
@@ -259,7 +264,9 @@ function nodeLabel(txt, p) {
             lastScript = chunkScript;
         }
 
-        str += escapeLatex(chunk[0]);
+        str += rtl[chunkScript]
+            ? '\\RL{'+escapeLatex(chunk[0])+'}'
+            : escapeLatex(chunk[0]);
     });
 
     return str;

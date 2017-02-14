@@ -165,11 +165,10 @@ block body
               option(value='palatino') Palatino
               option(value='times') Times
               option(value='times_mac') Times (Mac)
-          li.checkbox
-            input#ligatures(type='checkbox',name='ligatures',value='1')
-            label(for='ligatures') Extra Ligatures
           li#fontoptToggle
-            | Script font overrides: 
+            | Font options: 
+            a(data-div='ligatures', href='javascript:void(0)') Ligatures
+            | , 
             a(data-div='arabic', href='javascript:void(0)') Arabic
             | , 
             a(data-div='cjk', href='javascript:void(0)') CJK
@@ -181,6 +180,10 @@ block body
             a(data-div='syriac', href='javascript:void(0)') Syriac
         #fontopt
           ul
+            #ligatures
+              li.checkbox
+                input#ligaturesinput(type='checkbox',name='ligatures',value='1')
+                label(for='ligaturesinput') Extra Ligatures
             #arabic
               li Arabic:
               li

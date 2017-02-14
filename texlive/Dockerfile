@@ -5,6 +5,7 @@ RUN apt-get update \
     && apt-get -y --no-install-recommends install \
         ghostscript \
         perl-modules \
+        poppler-utils \
         wget \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*

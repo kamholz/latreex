@@ -4,7 +4,8 @@ MAINTAINER David Kamholz <lautgesetz@gmail.com>
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
         ghostscript \
-        netpbm \
+        imagemagick \
+        librsvg2-bin \
         perl-modules \
         poppler-utils \
         wget \

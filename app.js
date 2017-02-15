@@ -192,7 +192,7 @@ function parseTree(lines, lineNum, depth) {
     lineNum = lineNum || 0;
 
     for (var i = lineNum, l = lines.length; i < l; i++) {
-        var captures = lines[i].match(/^(-*)\s*(.+)$/);
+        var captures = lines[i].match(/^(-*)\s*(.+?)\s*$/);
         if (!captures) continue; // blank or malformed line
 
         var newDepth = captures[1].length;

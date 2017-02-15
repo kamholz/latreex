@@ -52,8 +52,8 @@ append js
           for (var i in json) {
             var elt = form.find('[name='+i+']');
 
-            if (!elt.size()) throw 'not found';
-            else if (elt.size() > 1) elt.val([json[i]]);
+            if (!elt.length) throw 'not found';
+            else if (elt.length > 1) elt.val([json[i]]);
             else {
               if (elt.is('input[type="checkbox"]')) elt.prop('checked', json[i] ? true : false);
               else elt.val(json[i]);

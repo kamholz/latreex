@@ -19,7 +19,7 @@ var rtl = {};
 var script = require('./lib/script');
 
 require('./lib/rtl').forEach(function (sc) {
-    rtl[sc] = true;
+  rtl[sc] = true;
 });
 
 var latexCommands = ['textrm','textbf','textit','textsubscript','textsuperscript'];
@@ -29,53 +29,53 @@ var latexCommandRegex = RegExp('^(.*?)(\\\\(?:' + latexCommands.join('|') + '))(
 // capture 3: rest of string
 
 var paramDefaults = {
-    linewidth:      '0.3pt',
-    treesep:        '4ex',
-    levelsep:       '2cm',
-    LFTwidth:       '15ex',
-    LFTsep:         '4pt',
-    orient:         'D',
-    style:          'nonflat',
-    centerlabels:   0,
-    font:           'noto_sans',
-    ligatures:      0,
-    arabic:         'noto_naskh',
-    cjk:            'noto_sc',
-    greek:          'noop',
-    hebrew:         'noto_hebrew',
-    syriac:         'syriac_estrangela',
+  linewidth:      '0.3pt',
+  treesep:        '4ex',
+  levelsep:       '2cm',
+  LFTwidth:       '15ex',
+  LFTsep:         '4pt',
+  orient:         'D',
+  style:          'nonflat',
+  centerlabels:   0,
+  font:           'noto_sans',
+  ligatures:      0,
+  arabic:         'noto_naskh',
+  cjk:            'noto_sc',
+  greek:          'noop',
+  hebrew:         'noto_hebrew',
+  syriac:         'syriac_estrangela',
 };
 
 var paramValidate = {
-    orient: /^[DURL]$/,
-    style:  /^(?:flat|nonflat)$/,
-    centerlabels: /^1$/,
-    font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
-    ligatures: /^1$/,
-    arabic: /^(?:amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq))$/,
-    cjk:    /^(?:adobe_kaiti|babelstone|noop|noto_(?:sc|tc|jp|kr)|stkaiti)$/,
-    greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson|times)$/,
-    hebrew: /^(?:cardo|david|ezra|mekorot_(?:rashi|vilna)|noop|noto_hebrew)$/,
-    syriac: /^(?:noop|syriac_(?:eastern|estrangela|western))$/,
+  orient: /^[DURL]$/,
+  style:  /^(?:flat|nonflat)$/,
+  centerlabels: /^1$/,
+  font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
+  ligatures: /^1$/,
+  arabic: /^(?:amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq))$/,
+  cjk:    /^(?:adobe_kaiti|babelstone|noop|noto_(?:sc|tc|jp|kr)|stkaiti)$/,
+  greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson|times)$/,
+  hebrew: /^(?:cardo|david|ezra|mekorot_(?:rashi|vilna)|noop|noto_hebrew)$/,
+  syriac: /^(?:noop|syriac_(?:eastern|estrangela|western))$/,
 };
 
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
-    paramValidate[p] = /^(?:[0-9]+)?\.?[0-9]+(?:in|mm|cm|pt|em|ex|pc|bp|dd|cc|sp)$/;
+  paramValidate[p] = /^(?:[0-9]+)?\.?[0-9]+(?:in|mm|cm|pt|em|ex|pc|bp|dd|cc|sp)$/;
 });
 
 var paramScriptMap = {
-    arabic: ['Arabic'],
-    cjk:    ['Bopomofo','Han','Hangul','Hiragana','Katakana'],
-    greek:  ['Greek'],
-    hebrew: ['Hebrew'],
-    syriac: ['Syriac'],
+  arabic: ['Arabic'],
+  cjk:    ['Bopomofo','Han','Hangul','Hiragana','Katakana'],
+  greek:  ['Greek'],
+  hebrew: ['Hebrew'],
+  syriac: ['Syriac'],
 };
 
 var orientToRefpoint = {
-    D: 't',
-    R: 'l',
-    L: 'r',
-    U: 'b'
+  D: 't',
+  R: 'l',
+  L: 'r',
+  U: 'b'
 };
 
 var treeDir = config.treeDir || __dirname + '/trees';
@@ -89,13 +89,13 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(stylus.middleware({
-    compile: function(str, path) {
-        return stylus(str)
-            .set('filename', path)
-            .set('include css', true)
-            .set('compress', true)
-    },
-    src: __dirname + '/public'
+  compile: function(str, path) {
+    return stylus(str)
+      .set('filename', path)
+      .set('include css', true)
+      .set('compress', true)
+  },
+  src: __dirname + '/public'
 }));
 
 app.use(express.static(__dirname + '/public'));
@@ -117,228 +117,227 @@ app.get('/png/:id', getFile('png','image/png'));
 var proxyApp;
 
 if (config.basepath !== '/') {
-    proxyApp = express();
-    proxyApp.use(config.basepath, app);
+  proxyApp = express();
+  proxyApp.use(config.basepath, app);
 }
 else proxyApp = app;
 
 config.port = config.port || 3001;
 proxyApp.listen(config.port, function () {
-    console.log("Express server listening on port %d in %s mode", config.port, app.settings.env);
+  console.log("Express server listening on port %d in %s mode", config.port, app.settings.env);
 });
 
 function index(req, res, next) {
-    res.render('index');
+  res.render('index');
 }
 
 function makeLatex(req, res, next) {
-    var p = req.body;
+  var p = req.body;
 
-    for (var i in p) p[i] = p[i].trim();
-    for (var i in paramValidate) {
-        if (p[i] === undefined || !p[i].match(paramValidate[i])) p[i] = paramDefaults[i];
+  for (var i in p) p[i] = p[i].trim();
+  for (var i in paramValidate) {
+    if (p[i] === undefined || !p[i].match(paramValidate[i])) p[i] = paramDefaults[i];
+  }
+
+  p.json = JSON.stringify(p, Object.keys(p).sort());
+
+  p.font = fontMap[p.font];
+
+  p.fontspecMap = {};
+  ['arabic','cjk','greek','hebrew','syriac'].forEach(function (param) {
+    if (p[param] !== 'noop') {
+      var font = fontMap[p[param]];
+      paramScriptMap[param].forEach(function (sc) {
+        p.fontspecMap[sc] = font;
+      });
     }
+  });
 
-    p.json = JSON.stringify(p, Object.keys(p).sort());
+  p.emoji = req.emoji = p.tree.match(emojiRegex) ? 1 : 0;
+  p.nodecmd = p.centerlabels ? 'TR' : 'Tr';
+  p.refpoint = orientToRefpoint[p.orient];
+  p.roman = function(dec) { return roman(dec).toLowerCase() };
 
-    p.font = fontMap[p.font];
+  p.tree = p.tree.split(/\r\n/);
+  p.tree.splice(1000);
+  p.tree = parseTree(p.tree)[0];
+  p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };
 
-    p.fontspecMap = {};
-    ['arabic','cjk','greek','hebrew','syriac'].forEach(function (param) {
-        if (p[param] !== 'noop') {
-            var font = fontMap[p[param]];
-            paramScriptMap[param].forEach(function (sc) {
-                p.fontspecMap[sc] = font;
-            });
-        }
-    });
+  req.file = uuid.v4();
+  req.treeName = getTreeName(p.tree.value);
 
-    p.emoji = req.emoji = p.tree.match(emojiRegex) ? 1 : 0;
-    p.nodecmd = p.centerlabels ? 'TR' : 'Tr';
-    p.refpoint = orientToRefpoint[p.orient];
-    p.roman = function(dec) { return roman(dec).toLowerCase() };
-
-    p.tree = p.tree.split(/\r\n/);
-    p.tree.splice(1000);
-    p.tree = parseTree(p.tree)[0];
-    p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };
-
-    req.file = uuid.v4();
-    req.treeName = getTreeName(p.tree.value);
-
-    fs.writeFile(treeDir+'/'+req.file+'.tex', ejs.render(latexTemplate, p), 'utf8', next);
+  fs.writeFile(treeDir+'/'+req.file+'.tex', ejs.render(latexTemplate, p), 'utf8', next);
 }
 
 function returnInfo(req, res, next) {
-    res.json({ id: req.file, name: req.treeName });
+  res.json({ id: req.file, name: req.treeName });
 }
 
 function makeFile(ext) {
-    return function(req, res, next) {
-        execFile(__dirname+'/script/make'+ext+'.sh', [treeDir,req.file,req.emoji,__dirname],
-        function (code) {
-            if (code) return res.sendStatus(409);
-            next();
-        });
-    }
+  return function(req, res, next) {
+    execFile(__dirname+'/script/make'+ext+'.sh', [treeDir,req.file,req.emoji,__dirname],
+    function (code) {
+      if (code) return res.sendStatus(409);
+      next();
+    });
+  }
 }
 
 function getFile(ext, mime) {
-    return function(req, res, next) {
-        var id = req.params.id;
-        if (!id) return res.sendStatus(409);
-        fs.readFile(treeDir+'/'+id+'.'+ext, function (err, data) {
-           if (err) return res.sendStatus(409);
-           res.attachment();
-           res.contentType(mime);
-           res.send(data);
-        });
-    }
+  return function(req, res, next) {
+    var id = req.params.id;
+    if (!id) return res.sendStatus(409);
+    fs.readFile(treeDir+'/'+id+'.'+ext, function (err, data) {
+      if (err) return res.sendStatus(409);
+      res.attachment();
+      res.contentType(mime);
+      res.send(data);
+    });
+  }
 }
 
 function parseTree(lines, lineNum, depth) {
-    var tree = [];
-    lineNum = lineNum || 0;
+  var tree = [];
+  lineNum = lineNum || 0;
 
-    for (var i = lineNum, l = lines.length; i < l; i++) {
-        var captures = lines[i].match(/^(-*)\s*(.+?)\s*$/);
-        if (!captures) continue; // blank or malformed line
+  for (var i = lineNum, l = lines.length; i < l; i++) {
+    var captures = lines[i].match(/^(-*)\s*(.+?)\s*$/);
+    if (!captures) continue; // blank or malformed line
 
-        var newDepth = captures[1].length;
-        if (depth === undefined) depth = newDepth; // set starting depth if we weren't given one
+    var newDepth = captures[1].length;
+    if (depth === undefined) depth = newDepth; // set starting depth if we weren't given one
 
-        if (newDepth < depth) break;
-        else if (newDepth === depth) tree.push({ value: captures[2], children: [], height: 1 });
-        else {
-            var subtree = parseTree(lines, i, newDepth);
-            var lastNode = tree[tree.length - 1];
-            lastNode.children = subtree;
-            lastNode.height = Math.max.apply(Math, subtree.map(function (node) { return node.height })) + 1;
-            i += subtree.numLines - 1;
-        }
+    if (newDepth < depth) break;
+    else if (newDepth === depth) tree.push({ value: captures[2], children: [], height: 1 });
+    else {
+      var subtree = parseTree(lines, i, newDepth);
+      var lastNode = tree[tree.length - 1];
+      lastNode.children = subtree;
+      lastNode.height = Math.max.apply(Math, subtree.map(function (node) { return node.height })) + 1;
+      i += subtree.numLines - 1;
     }
+  }
 
-    tree.numLines = i - lineNum;
-    return tree;
+  tree.numLines = i - lineNum;
+  return tree;
 }
 
 function pstNode(p, treeNode, depth) {
-    var str = '';
-    var node, afternode;
-    var captures = treeNode.value.match(/^(\.?)(.*?)(~?)(\^*)$/);
+  var str = '';
+  var node, afternode;
+  var captures = treeNode.value.match(/^(\.?)(.*?)(~?)(\^*)$/);
 
-    if (captures[1] !== '' || captures[2] === '') {
-        node = '\\Tn';
-        afternode = '\\Tp';
-    } else {
-        node = (captures[3] !== '' ? '\\LFTr' : '\\LFTw')
-            + '{'+p.refpoint+'}{'+formatLatex(captures[2], p)+'}';
-        afternode = '\\Tp[edge=none]';
-    }
+  if (captures[1] !== '' || captures[2] === '') {
+    node = '\\Tn';
+    afternode = '\\Tp';
+  } else {
+    node = (captures[3] !== '' ? '\\LFTr' : '\\LFTw')
+      + '{'+p.refpoint+'}{'+formatLatex(captures[2], p)+'}';
+    afternode = '\\Tp[edge=none]';
+  }
 
-    str += '\n';
-    var i = depth;
-    while (i--) str += '  ';
+  str += '\n';
+  var i = depth;
+  while (i--) str += '  ';
 
-    var skip = 0;
-    if (p.style === 'flat') {
-        skip = p.tree.height - depth - treeNode.height;
-        if (captures[4]) skip -= captures[4].length;
-        if (skip < 0) skip = 0;
-    }
+  var skip = 0;
+  if (p.style === 'flat') {
+    skip = p.tree.height - depth - treeNode.height;
+    if (captures[4]) skip -= captures[4].length;
+    if (skip < 0) skip = 0;
+  }
 
-    if (skip > 0) str += '\\skiplevels{'+skip*2+'} ';
+  if (skip > 0) str += '\\skiplevels{'+skip*2+'} ';
 
-    if (treeNode.children.length) {
-        str += '\\pstree{'+node+'}{\\pstree{'+afternode+'}{%';
-        treeNode.children.forEach(function (x) { str += pstNode(p, x, depth+skip+1) });
-        str += '}}';
-    }
-    else str += node;
+  if (treeNode.children.length) {
+    str += '\\pstree{'+node+'}{\\pstree{'+afternode+'}{%';
+    treeNode.children.forEach(function (x) { str += pstNode(p, x, depth+skip+1) });
+    str += '}}';
+  }
+  else str += node;
 
-    if (skip > 0) str += ' \\endskiplevels';
+  if (skip > 0) str += ' \\endskiplevels';
 
-    return str;
+  return str;
 }
 
 function formatLatex(txt, p) {
-    var captures = txt.match(latexCommandRegex);
+  var captures = txt.match(latexCommandRegex);
 
-    if (captures) {
-        var arg = parseLatexCommandArg(captures[3]);
-        return arg
-            ? formatLatexText(captures[1], p) + captures[2] + '{' + formatLatex(arg[0], p) + '}' + formatLatex(arg[1], p)
-            : formatLatexText(captures[1] + captures[2], p) + formatLatex(captures[3], p);
-    }
-    else return formatLatexText(txt, p);
+  if (captures) {
+    var arg = parseLatexCommandArg(captures[3]);
+    return arg
+      ? formatLatexText(captures[1], p) + captures[2] + '{' + formatLatex(arg[0], p) + '}' + formatLatex(arg[1], p)
+      : formatLatexText(captures[1] + captures[2], p) + formatLatex(captures[3], p);
+  }
+  else return formatLatexText(txt, p);
 }
 
 function parseLatexCommandArg(txt) {
-    var depth = 0;
+  var depth = 0;
 
-    for (var i = 0; i < txt.length; i++) {
-        if (txt[i] === '{') depth++;
-        else if (txt[i] === '}') depth--;
+  for (var i = 0; i < txt.length; i++) {
+    if (txt[i] === '{') depth++;
+    else if (txt[i] === '}') depth--;
 
-        if (depth === 0) return [txt.substr(1, i-1), txt.substr(i+1)];
-    }
+    if (depth === 0) return [txt.substr(1, i-1), txt.substr(i+1)];
+  }
 
-    return null;
+  return null;
 }
 
 function formatLatexText(txt, p) {
-    var str = '';
-    var lastFont, lastScript;
+  var str = '';
+  var lastFont, lastScript;
 
-    script.split(txt).forEach(function (chunk) {
-        var chunkScript = chunk[1];
-        var mappedFont;
+  script.split(txt).forEach(function (chunk) {
+    var chunkScript = chunk[1];
+    var mappedFont;
 
-        if (p.fontspecMap[chunkScript]) mappedFont = p.fontspecMap[chunkScript];
-        else if (p.font.match(/^Noto/)) {
-            mappedFont = notoFontMap[p.font] && notoFontMap[p.font][chunkScript]
-                ? notoFontMap[p.font][chunkScript]
-                : notoFontMap.general[chunkScript];
-        }
+    if (p.fontspecMap[chunkScript]) mappedFont = p.fontspecMap[chunkScript];
+    else if (p.font.match(/^Noto/)) {
+      mappedFont = notoFontMap[p.font] && notoFontMap[p.font][chunkScript]
+        ? notoFontMap[p.font][chunkScript]
+        : notoFontMap.general[chunkScript];
+    }
 
-        var font = mappedFont || p.font;
+    var font = mappedFont || p.font;
 
-        if (font !== lastFont || chunkScript !== lastScript) {
-            str += '\\fontspec{'+font+'}';
+    if (font !== lastFont || chunkScript !== lastScript) {
+      str += '\\fontspec{'+font+'}';
 
-            if (fontspecScriptMap[chunkScript])
-                str += '[Script='+fontspecScriptMap[chunkScript]+']';
+      if (fontspecScriptMap[chunkScript]) str += '[Script='+fontspecScriptMap[chunkScript]+']';
 
-            lastFont = font;
-            lastScript = chunkScript;
-        }
+      lastFont = font;
+      lastScript = chunkScript;
+    }
 
-        str += rtl[chunkScript]
-            ? '\\RL{'+escapeLatex(chunk[0])+'}'
-            : escapeLatex(chunk[0]);
-    });
+    str += rtl[chunkScript]
+      ? '\\RL{'+escapeLatex(chunk[0])+'}'
+      : escapeLatex(chunk[0]);
+  });
 
-    return str;
+  return str;
 }
 
 function escapeLatex(txt) {
-    return txt
-        .replace(/([{}&$%#_])/g,'\\$1')
-        .replace(/\\(?![{}&$%#_])/g,'\\textbackslash{}')
-        .replace(/~/g,'\\textasciitilde{}')
-        .replace(/\^/g, '\\textasciicircum{}');
+  return txt
+    .replace(/([{}&$%#_])/g,'\\$1')
+    .replace(/\\(?![{}&$%#_])/g,'\\textbackslash{}')
+    .replace(/~/g,'\\textasciitilde{}')
+    .replace(/\^/g, '\\textasciicircum{}');
 }
 
 function getTreeName(txt) {
-    txt = txt
-        .replace(/~?\^*$/,'')
-        .replace(/^\./,'')
-        .replace(/[:\\\/]/g,'')
-        .trim();
+  txt = txt
+    .replace(/~?\^*$/,'')
+    .replace(/^\./,'')
+    .replace(/[:\\\/]/g,'')
+    .trim();
 
-    if (txt === '') txt = 'tree-unnamed';
+  if (txt === '') txt = 'tree-unnamed';
 
-    return txt;
+  return txt;
 }
 
 var D = [1,5,10,50,100,500,1000];
@@ -347,7 +346,7 @@ var R = ['I','V','X','L','C','D','M'];
 function roman(dec) {
   var r = '', d = dec;
   for (var i = 6; i >= 0; i--) {
-    while (d >= D[i]) {d -= D[i]; r += R[i];}
+  while (d >= D[i]) {d -= D[i]; r += R[i];}
     if (i > 0 && d >= D[i]-D[i-2+i%2]) {d -= D[i]-D[i-2+i%2]; r += R[i-2+i%2]+R[i];}
   }
   return r;

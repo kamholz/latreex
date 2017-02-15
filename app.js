@@ -22,6 +22,12 @@ require('./lib/rtl').forEach(function (sc) {
     rtl[sc] = true;
 });
 
+var latexCommands = ['textrm','textbf','textit','textsubscript','textsuperscript'];
+var latexCommandRegex = RegExp('^(.*?)(\\\\(?:' + latexCommands.join('|') + '))(\\{.+\\}.*)$');
+// capture 1: text before command
+// capture 2: command (including backslash) before arg
+// capture 3: rest of string
+
 var paramDefaults = {
     linewidth:      '0.3pt',
     treesep:        '4ex',
@@ -226,7 +232,7 @@ function pstNode(p, treeNode, depth) {
         afternode = '\\Tp';
     } else {
         node = (captures[3] !== '' ? '\\LFTr' : '\\LFTw')
-            + '{'+p.refpoint+'}{'+nodeLabel(captures[2], p)+'}';
+            + '{'+p.refpoint+'}{'+formatLatex(captures[2], p)+'}';
         afternode = '\\Tp[edge=none]';
     }
 
@@ -255,7 +261,32 @@ function pstNode(p, treeNode, depth) {
     return str;
 }
 
-function nodeLabel(txt, p) {
+function formatLatex(txt, p) {
+    var captures = txt.match(latexCommandRegex);
+
+    if (captures) {
+        var arg = parseLatexCommandArg(captures[3]);
+        return arg
+            ? formatLatexText(captures[1], p) + captures[2] + '{' + formatLatex(arg[0], p) + '}' + formatLatex(arg[1], p)
+            : formatLatexText(captures[1] + captures[2], p) + formatLatex(captures[3], p);
+    }
+    else return formatLatexText(txt, p);
+}
+
+function parseLatexCommandArg(txt) {
+    var depth = 0;
+
+    for (var i = 0; i < txt.length; i++) {
+        if (txt[i] === '{') depth++;
+        else if (txt[i] === '}') depth--;
+
+        if (depth === 0) return [txt.substr(1, i-1), txt.substr(i+1)];
+    }
+
+    return null;
+}
+
+function formatLatexText(txt, p) {
     var str = '';
     var lastFont, lastScript;
 
@@ -292,11 +323,10 @@ function nodeLabel(txt, p) {
 
 function escapeLatex(txt) {
     return txt
-        .replace(/\\/g,'\\textbackslash{}')
+        .replace(/([{}&$%#_])/g,'\\$1')
+        .replace(/\\(?![{}&$%#_])/g,'\\textbackslash{}')
         .replace(/~/g,'\\textasciitilde{}')
-        .replace(/[&$%#]/g,'\\$1')
-        .replace(/\*([^*]+)\*/g, '\\textbf{$1}')
-        .replace(/_([^_]+)_/g, '\\textit{$1}');
+        .replace(/\^/g, '\\textasciicircum{}');
 }
 
 function getTreeName(txt) {

@@ -5,6 +5,7 @@ var logger = require('morgan');
 var stylus = require('stylus');
 
 var ejs = require('ejs');
+var emojiRegex = require('emoji-regex')();
 var execFile = require('child_process').execFile;
 var fs = require('fs');
 var uuid = require('uuid');
@@ -135,7 +136,7 @@ function makeLatex(req, res, next) {
 
     p.font = fontMap[p.font];
 
-    p.fontspecMap = { Emoji:  'Noto Color Emoji' };
+    p.fontspecMap = {};
 
     ['arabic','cjk','greek','hebrew','syriac'].forEach(function (param) {
         if (p[param] !== 'noop') {
@@ -146,6 +147,7 @@ function makeLatex(req, res, next) {
         }
     });
 
+    p.emoji = req.emoji = p.tree.match(emojiRegex) ? 1 : 0;
     p.nodecmd = p.centerlabels ? 'TR' : 'Tr';
     p.refpoint = orientToRefpoint[p.orient];
     p.tree = parseTree(p.tree.split(/\r\n/))[0];
@@ -164,7 +166,8 @@ function returnInfo(req, res, next) {
 
 function makeFile(ext) {
     return function(req, res, next) {
-        execFile(__dirname + '/script/make'+ext+'.sh', [treeDir,req.file], function (code) {
+        execFile(__dirname+'/script/make'+ext+'.sh', [treeDir,req.file,req.emoji,__dirname],
+        function (code) {
             if (code) return res.sendStatus(409);
             next();
         });

@@ -41,16 +41,16 @@ var paramDefaults = {
 };
 
 var paramValidate = {
-    orient: /^(?:D|U|R|L)$/,
+    orient: /^[DURL]$/,
     style:  /^(?:flat|nonflat)$/,
     centerlabels: /^1$/,
     font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
     ligatures: /^1$/,
-    arabic: /^amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,
-    cjk:    /^adobe_kaiti|babelstone|noop|noto_(?:sc|tc|jp|kr)|stkaiti$/,
-    greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson)|times$/,
+    arabic: /^(?:amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq))$/,
+    cjk:    /^(?:adobe_kaiti|babelstone|noop|noto_(?:sc|tc|jp|kr)|stkaiti)$/,
+    greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson|times)$/,
     hebrew: /^(?:cardo|david|ezra|mekorot_(?:rashi|vilna)|noop|noto_hebrew)$/,
-    syriac: /^noop|syriac_(?:eastern|estrangela|western)$/,
+    syriac: /^(?:noop|syriac_(?:eastern|estrangela|western))$/,
 };
 
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {

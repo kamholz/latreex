@@ -135,7 +135,7 @@ function makeLatex(req, res, next) {
 
     p.font = fontMap[p.font];
 
-    p.fontspecMap = { Emoji:  'Noto Emoji' };
+    p.fontspecMap = { Emoji:  'Noto Color Emoji' };
 
     ['arabic','cjk','greek','hebrew','syriac'].forEach(function (param) {
         if (p[param] !== 'noop') {

@@ -108,11 +108,11 @@ block body
           li
             label.wide Space between sibling nodes:
             input(type='text',name='treesep',value='4ex',size=6,maxlength=6,tabindex=1)
-            span.tooltip.ui-icon.ui-icon-info(data-content='Space between daughters of the same parent, e.g., <em>Baltic</em> and <em>Slavic</em>')
+            span.tooltip.ui-icon.ui-icon-info(data-content='Space between child nodes of the same parent, e.g., <em>Baltic</em> and <em>Slavic</em>')
           li
-            label.wide Parent to daughter length:
+            label.wide Parent to child length:
             input(type='text',name='levelsep',value='2cm',size=6,maxlength=6,tabindex=2)
-            span.tooltip.ui-icon.ui-icon-info(data-content='Length between parents and daughters, e.g., <em>Balto-Slavic</em> and <em>Baltic</em>')
+            span.tooltip.ui-icon.ui-icon-info(data-content='Length between parent and child nodes, e.g., <em>Balto-Slavic</em> and <em>Baltic</em>')
           li
             label.wide Maximum node label width:
             input(type='text',name='LFTwidth',value='15ex',size=6,maxlength=6,tabindex=3)
@@ -129,7 +129,7 @@ block body
       .rowform.left#style
         ul
           li Style:
-            span.tooltip.ui-icon.ui-icon-info(data-content='In non-flat trees, parent and daughter nodes are always the same distance apart. In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other. Flat style is generally only practical for smaller trees.<br><br>“Center labels” will vertically center labels on the same level in a vertical tree. It can be useful if you have multiline labels.')
+            span.tooltip.ui-icon.ui-icon-info(data-content='In non-flat trees, parent and child nodes are always the same distance apart. In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other. Flat style is generally only practical for smaller trees.<br><br><b>Center labels</b> will vertically center labels on the same level in a vertical tree. It can be useful if you have multiline labels.')
           li
             input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=6)
             label(for='style_nonflat') Non-flat

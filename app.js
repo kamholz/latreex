@@ -22,8 +22,10 @@ require('./lib/rtl').forEach(function (sc) {
   rtl[sc] = true;
 });
 
-var latexCommands = ['textrm','textbf','textit','textsubscript','textsuperscript'];
-var latexCommandRegex = RegExp('^(.*?)(\\\\(?:' + latexCommands.join('|') + '))(\\{.+\\}.*)$');
+var latexCommands = ['footnotesize','huge','HUGE','large','Large','LARGE','newline','normalsize','scriptsize','small','tiny'];
+var latexCommandsArg = ['textbf','textit','textrm','textsc','textsubscript','textsuperscript','underline'];
+var latexCommandsRegex = RegExp('^(.*?)(\\\\(?:' + latexCommands.join('|') + ')\\{\\})(.*?)$');
+var latexCommandsArgRegex = RegExp('^(.*?)(\\\\(?:' + latexCommandsArg.join('|') + '))(\\{.+\\}.*)$');
 // capture 1: text before command
 // capture 2: command (including backslash) before arg
 // capture 3: rest of string
@@ -262,7 +264,11 @@ function pstNode(p, treeNode, depth) {
 }
 
 function formatLatex(txt, p) {
-  var captures = txt.match(latexCommandRegex);
+  var captures = txt.match(latexCommandsRegex);
+
+  if (captures) return formatLatexText(captures[1], p) + captures[2] + formatLatex(captures[3], p);
+
+  captures = txt.match(latexCommandsArgRegex);
 
   if (captures) {
     var arg = parseLatexCommandArg(captures[3]);

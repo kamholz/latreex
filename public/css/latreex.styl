@@ -1,4 +1,5 @@
 @import 'reset.css'
+@import 'jquery-ui.min.css'
 
 border-radius()
   -webkit-border-radius arguments
@@ -27,7 +28,7 @@ h1
   font-weight bold
   font-size 120%
 
-i
+em
   font-style italic
 
 input[type='checkbox']
@@ -51,21 +52,15 @@ textarea
   float right
 
 .tooltip
-  margin-left 1ex
-  position relative
-  top 2px
+  margin-left 5px
   &:hover
     cursor pointer
 
-#tooltip
-	position absolute
-	z-index 9999
-	border-radius(8px)
-	background-color #555
-	color lightgreen
-	padding 10px
-	font-size 85%
-	line-height 1.25
+.ui-tooltip
+  max-width 400px !important
+
+.ui-tooltip-content
+  font-size 80%
 
 .rowform
   ul
@@ -74,9 +69,7 @@ textarea
   li
     margin-bottom .2em
   label
-    display inline-block
-    text-align right
-    margin-right 1ex
+    margin-right 0.5ex
   label.wide
     width 14em
   input[type='radio']
@@ -84,21 +77,18 @@ textarea
   button
     margin-bottom 1em
   .checkbox
+    margin-top 1ex
     margin-bottom 1ex
 
 #space
   margin-bottom 1.5em
+  label
+    display inline-block
+    text-align right
+    margin-right 1ex
 
-#buttons
-  margin-top 1em
-  button
-    margin 0 1em
-
-#previewimage
-  margin-top 1em
-  text-align center
-  img
-    max-width 100%
+#style
+  max-width 9em
 
 #font
   max-width 11em
@@ -114,6 +104,17 @@ textarea
 
 #fontselect
   margin-bottom 1em
+
+#buttons
+  margin-top 0.75em
+  button
+    margin 0 1em
+
+#previewimage
+  margin-top 1em
+  text-align center
+  img
+    max-width 100%
 
 #copyarea
   position fixed

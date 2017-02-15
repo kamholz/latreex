@@ -22,20 +22,21 @@ require('./lib/rtl').forEach(function (sc) {
 });
 
 var paramDefaults = {
-    linewidth:  '0.3pt',
-    treesep:    '4ex',
-    levelsep:   '2cm',
-    LFTwidth:   '15ex',
-    LFTsep:     '4pt',
-    orient:     'D',
-    style:      'nonflat',
-    font:       'noto_sans',
-    ligatures:  0,
-    arabic:     'noto_naskh',
-    cjk:        'noto_sc',
-    greek:      'noop',
-    hebrew:     'noto_hebrew',
-    syriac:     'syriac_estrangela',
+    linewidth:      '0.3pt',
+    treesep:        '4ex',
+    levelsep:       '2cm',
+    LFTwidth:       '15ex',
+    LFTsep:         '4pt',
+    orient:         'D',
+    style:          'nonflat',
+    centerlabels:   0,
+    font:           'noto_sans',
+    ligatures:      0,
+    arabic:         'noto_naskh',
+    cjk:            'noto_sc',
+    greek:          'noop',
+    hebrew:         'noto_hebrew',
+    syriac:         'syriac_estrangela',
 };
 
 var paramValidate = {
@@ -145,6 +146,7 @@ function makeLatex(req, res, next) {
         }
     });
 
+    p.nodecmd = p.centerlabels ? 'TR' : 'Tr';
     p.refpoint = orientToRefpoint[p.orient];
     p.tree = parseTree(p.tree.split(/\r\n/))[0];
     p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };

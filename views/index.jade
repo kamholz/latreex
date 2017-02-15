@@ -1,13 +1,21 @@
 extends base
 
 append js
-  script(type='text/javascript',src='#{basepath}js/jquery.tooltip.min.js')
+  script(type='text/javascript',src='#{basepath}js/jquery-ui.min.js')
   script(type='text/javascript').
     var basepath = '#{basepath}';
     $(document).ready(function () {
-      $().tooltip();
-      var height = $('#tooltip').innerHeight();
-      $('img.tooltip').tooltip({ showURL: false, top: -height, left: 20 });
+      $('.tooltip').each(function () {
+        var elt = $(this);
+
+        elt.tooltip({
+          position: { my: 'left+15 top-15', at: 'right center' },
+          show: { effect: 'fade', duration: 300 },
+          hide: { effect: 'fade', duration: 300 },
+          content: elt.data('content'),
+          items: '*'
+        });
+      });
 
       var copyarea = $('#copyarea');
       var form = $('#form');
@@ -93,39 +101,43 @@ block body
   form#form(method='post',action='/')
 
     .left
-      #space.rowform
+      .rowform#space
         ul
           li
             label.wide Space between sibling nodes:
             input(type='text',name='treesep',value='4ex',size=6,maxlength=6,tabindex=1)
-            img.tooltip(src='#{basepath}images/question.png',title='Space between daughters of the same parent, e.g., <i>Baltic</i> and <i>Slavic</i>')
+            span.tooltip.ui-icon.ui-icon-info(data-content='Space between daughters of the same parent, e.g., <em>Baltic</em> and <em>Slavic</em>')
           li
             label.wide Parent to daughter length:
             input(type='text',name='levelsep',value='2cm',size=6,maxlength=6,tabindex=2)
-            img.tooltip(src='#{basepath}images/question.png',title='Length between parents and daughters, e.g., <i>Balto-Slavic</i> and <i>Baltic</i>')
+            span.tooltip.ui-icon.ui-icon-info(data-content='Length between parents and daughters, e.g., <em>Balto-Slavic</em> and <em>Baltic</em>')
           li
             label.wide Maximum node label width:
             input(type='text',name='LFTwidth',value='15ex',size=6,maxlength=6,tabindex=3)
-            img.tooltip(src='#{basepath}images/question.png',title='Maximum width of node labels (language/family names) before wrapping to another line<br>(can be overridden for an individual label by appending ~ to it)')
+            span.tooltip.ui-icon.ui-icon-info(data-content='Maximum width of node labels (language or family names) before wrapping to another line (can be overridden for an individual label by appending ~ to it)')
           li
             label.wide Node label padding:
             input(type='text',name='LFTsep',value='4pt',size=6,maxlength=6,tabindex=4)
-            img.tooltip(src='#{basepath}images/question.png',title='Whitespace padding/cushion around node labels (language/family names)')
+            span.tooltip.ui-icon.ui-icon-info(data-content='Whitespace padding/cushion around node labels (language or family names)')
           li
             label.wide Line thickness:
             input(type='text',name='linewidth',value='0.3pt',size=6,maxlength=6,tabindex=5)
-            img.tooltip(src='#{basepath}images/question.png',title='Thickness of lines connecting nodes')
+            span.tooltip.ui-icon.ui-icon-info(data-content='Thickness of lines connecting nodes')
 
-      .rowform.left
+      .rowform.left#style
         ul
           li Style:
-            img.tooltip(src='#{basepath}images/question.png',title='In non-flat trees, parent and daughter nodes are always the same distance apart.<br>In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other.<br>The flat style is generally only practical for smaller trees.')
+            span.tooltip.ui-icon.ui-icon-info(data-content='In non-flat trees, parent and daughter nodes are always the same distance apart. In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other. Flat style is generally only practical for smaller trees.<br><br><em>Center labels</em> will vertically center labels on the same level in a vertical tree. It can be useful if you have multiline labels.')
           li
             input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=6)
             label(for='style_nonflat') Non-flat
           li
             input#style_flat(type='radio',name='style',value='flat',tabindex=7)
             label(for='style_flat') Flat
+          li.checkbox
+            input#centerlabels(type='checkbox',name='centerlabels',value='1',tabindex=13)
+            label(for='centerlabels') Center labels
+
 
       .rowform.left
         ul
@@ -143,9 +155,10 @@ block body
             input#orient_U(type='radio',name='orient',value='U',tabindex=11)
             label(for='orient_U') Bottom to top
 
-      #font.rowform.left
+      .rowform.left#font
         ul
           li Font:
+            span.tooltip.ui-icon.ui-icon-info(data-content='The main dropdown lets you choose your main font. To show additional options, click the highlighted sections below. The ligatures section lets you turn on extra (“Rare”) ligatures. The other sections let you override the font for particular scripts. Note that if you hide a section again, your choice will be preserved.')
           li
             select#fontselect(name='font',tabindex=12)
               option(value='arial') Arial
@@ -182,8 +195,8 @@ block body
           ul
             #ligatures
               li.checkbox
-                input#ligaturesinput(type='checkbox',name='ligatures',value='1',tabindex=13)
-                label(for='ligaturesinput') Extra Ligatures
+                input#ligatures_input(type='checkbox',name='ligatures',value='1',tabindex=13)
+                label(for='ligatures_input') Extra Ligatures
             #arabic
               li Arabic:
               li
@@ -242,7 +255,7 @@ block body
 
     .left
       p Enter tree:
-        img.tooltip(src='#{basepath}images/question.png',title='Enter one node (e.g., language or family name) per line.<br>The first line contains the root node; subsequent lines contain child nodes.<br>Embedding is indicated with the appropriate number of dashes (-).<br>For an unlabeled node, use a dot (.).<br>To force a label not to wrap across lines, append ~.<br>To push a node up on a flat-style tree, append one ^ for each level (after ~, if present).<br>Styles are available as *bold* and _italic_.')
+        span.tooltip.ui-icon.ui-icon-info(data-content='Enter one node (e.g., language or family name) per line. The first line contains the root node; subsequent lines contain child nodes. Embedding is indicated with the appropriate number of dashes/hyphens (-). For an unlabeled node, use a dot (.). Styles are available as *bold* and _italic_.<br><br>To force a label not to wrap across lines, append ~.<br><br>To push a node up on a flat-style tree, append one ^ for each level (after ~, if present).')
       textarea(name='tree',rows=18,cols=40,tabindex=20)
         | Proto-Indo-European~
         | -Balto-Slavic~

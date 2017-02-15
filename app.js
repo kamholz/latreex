@@ -43,6 +43,7 @@ var paramDefaults = {
 var paramValidate = {
     orient: /^(?:D|U|R|L)$/,
     style:  /^(?:flat|nonflat)$/,
+    centerlabels: /^1$/,
     font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
     ligatures: /^1$/,
     arabic: /^amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq)$/,

@@ -15,20 +15,18 @@ var fontMap = require('./lib/font');
 var fontspecScriptMap = require('./lib/fontspec_script');
 var latexTemplate = fs.readFileSync(__dirname + '/lib/latex.ejs', 'utf8');
 var notoFontMap = require('./lib/noto');
-var rtl = {};
 var script = require('./lib/script');
 
+var rtlScript = {};
 require('./lib/rtl').forEach(function (sc) {
-  rtl[sc] = true;
+  rtlScript[sc] = true;
 });
 
 var latexCommands = ['footnotesize','huge','HUGE','large','Large','LARGE','newline','normalsize','scriptsize','small','tiny'];
 var latexCommandsArg = ['textbf','textit','textrm','textsc','textsubscript','textsuperscript','underline'];
 var latexCommandsRegex = RegExp('^(.*?)(\\\\(?:' + latexCommands.join('|') + ')\\{\\})(.*?)$');
 var latexCommandsArgRegex = RegExp('^(.*?)(\\\\(?:' + latexCommandsArg.join('|') + '))(\\{.+\\}.*)$');
-// capture 1: text before command
-// capture 2: command (including backslash) before arg
-// capture 3: rest of string
+// captures: (1) text before command; (2) command (including backslash) before arg; (3) rest of string
 
 var paramDefaults = {
   linewidth:      '0.3pt',
@@ -36,9 +34,9 @@ var paramDefaults = {
   levelsep:       '2cm',
   LFTwidth:       '15ex',
   LFTsep:         '4pt',
-  orient:         'D',
   style:          'nonflat',
   centerlabels:   0,
+  orient:         'D',
   font:           'noto_sans',
   ligatures:      0,
   arabic:         'noto_naskh',
@@ -49,9 +47,9 @@ var paramDefaults = {
 };
 
 var paramValidate = {
-  orient: /^[DURL]$/,
   style:  /^(?:flat|nonflat)$/,
   centerlabels: /^1$/,
+  orient: /^[DURL]$/,
   font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
   ligatures: /^1$/,
   arabic: /^(?:amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq))$/,
@@ -73,12 +71,7 @@ var paramScriptMap = {
   syriac: ['Syriac'],
 };
 
-var orientToRefpoint = {
-  D: 't',
-  R: 'l',
-  L: 'r',
-  U: 'b'
-};
+var orientToRefpoint = { D: 't', R: 'l', L: 'r', U: 'b' };
 
 var treeDir = config.treeDir || __dirname + '/trees';
 if (!fs.existsSync(treeDir)) fs.mkdirSync(treeDir);
@@ -143,7 +136,11 @@ function makeLatex(req, res, next) {
 
   p.json = JSON.stringify(p, Object.keys(p).sort());
 
+  p.emoji = req.emoji = p.tree.match(emojiRegex) ? 1 : 0;
   p.font = fontMap[p.font];
+  p.nodecmd = p.centerlabels ? 'TR' : 'Tr';
+  p.refpoint = orientToRefpoint[p.orient];
+  p.roman = function(dec) { return roman(dec).toLowerCase() };
 
   p.fontspecMap = {};
   ['arabic','cjk','greek','hebrew','syriac'].forEach(function (param) {
@@ -154,11 +151,6 @@ function makeLatex(req, res, next) {
       });
     }
   });
-
-  p.emoji = req.emoji = p.tree.match(emojiRegex) ? 1 : 0;
-  p.nodecmd = p.centerlabels ? 'TR' : 'Tr';
-  p.refpoint = orientToRefpoint[p.orient];
-  p.roman = function(dec) { return roman(dec).toLowerCase() };
 
   p.tree = p.tree.split(/\r\n/);
   p.tree.splice(1000);
@@ -264,19 +256,19 @@ function pstNode(p, treeNode, depth) {
 }
 
 function formatLatex(txt, p) {
-  var captures = txt.match(latexCommandsRegex);
+  var captures;
 
-  if (captures) return formatLatexText(captures[1], p) + captures[2] + formatLatex(captures[3], p);
+  if (captures = txt.match(latexCommandsRegex))
+    return formatLatexText(captures[1], p) + captures[2] + formatLatex(captures[3], p);
 
-  captures = txt.match(latexCommandsArgRegex);
-
-  if (captures) {
+  if (captures = txt.match(latexCommandsArgRegex)) {
     var arg = parseLatexCommandArg(captures[3]);
     return arg
       ? formatLatexText(captures[1], p) + captures[2] + '{' + formatLatex(arg[0], p) + '}' + formatLatex(arg[1], p)
       : formatLatexText(captures[1] + captures[2], p) + formatLatex(captures[3], p);
   }
-  else return formatLatexText(txt, p);
+
+  return formatLatexText(txt, p);
 }
 
 function parseLatexCommandArg(txt) {
@@ -318,7 +310,7 @@ function formatLatexText(txt, p) {
       lastScript = chunkScript;
     }
 
-    str += rtl[chunkScript]
+    str += rtlScript[chunkScript]
       ? '\\RL{'+escapeLatex(chunk[0])+'}'
       : escapeLatex(chunk[0]);
   });

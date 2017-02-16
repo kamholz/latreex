@@ -225,6 +225,8 @@ function multitreeToLatreex(data) {
   return output;
 
   function _extract(data, level) {
+    if (data.nodetype === 'Dialect') return;
+
     for (var i = level; i > 0; i--) output += '-';
     output += data.name + '\n';
     lines++;

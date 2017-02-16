@@ -153,7 +153,7 @@ function makeLatex(req, res, next) {
   });
 
   p.tree = p.tree.split(/\r\n/);
-  p.tree.splice(1000);
+  p.tree.splice(5000);
   p.tree = parseTree(p.tree)[0];
   p.pstTree = function() { return pstNode(p, p.tree, 0).replace(/^\n/,'') };
 

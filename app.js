@@ -188,7 +188,7 @@ function multitree(req, res, next) {
         ? findMultitreeNode(data, req.params.nodeName)
         : data;
 
-      if (tree) res.send(multitreeToLatreex(tree));
+      if (tree) res.send(multitreeToLatreex(tree, req.query.dialect));
       else res.sendStatus(409);
     } catch (e) {
       if (e === 'ELIMIT') res.send(e);
@@ -216,7 +216,7 @@ function findMultitreeNode(data, nodeName) {
   return null;
 }
 
-function multitreeToLatreex(data) {
+function multitreeToLatreex(data, dialect) {
   var output = '';
   var lines = 0;
 
@@ -225,7 +225,7 @@ function multitreeToLatreex(data) {
   return output;
 
   function _extract(data, level) {
-    if (data.nodetype === 'Dialect') return;
+    if (!dialect && data.nodetype === 'Dialect') return;
 
     for (var i = level; i > 0; i--) output += '-';
     output += data.name + '\n';

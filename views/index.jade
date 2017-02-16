@@ -126,9 +126,10 @@ append js
       function multiTree() {
         var id = multitreeDialog.find('input[name=id]').val().trim();
         var subgroup = multitreeDialog.find('input[name=subgroup]').val().trim();
+        var dialect = multitreeDialog.find('input[name=dialect]').prop('checked') ? 1 : 0;
 
         if (!id.match(/^\d+$/)) {
-          multitreeDialog.find('.error').html('Missing or invalid MultiTree ID (must be numeric)');
+          multitreeDialog.find('.error').html('Missing or invalid MultiTree ID (must be numeric)').show();
           return;
         }
 
@@ -138,7 +139,7 @@ append js
         if (subgroup.length) url += '/'+subgroup;
 
         display('');
-        $.get(url)
+        $.get({ url: url, data: { dialect: dialect } })
         .done(function (data) {
           if (data === 'ELIMIT') display('MultiTree could not be loaded: tree too big');
           else {
@@ -153,6 +154,7 @@ append js
 
       $('#multitree').click(function () {
         multitreeDialog.find('input').val('');
+        multitreeDialog.find('.error').hide();
         multitreeDialog.dialog('open');
       });
 
@@ -382,6 +384,9 @@ block body
     label
       span Subgroup name:
       input(type='text',name='subgroup',size=20,placeholder='Anatolian')
+    label
+      span Include dialects:
+      input(type='checkbox',name='dialect')
     .error
 
   textarea#copyarea

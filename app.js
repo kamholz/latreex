@@ -62,7 +62,7 @@ var paramValidate = {
 };
 
 ['linewidth','treesep','levelsep','LFTwidth','LFTsep'].forEach(function (p) {
-  paramValidate[p] = /^(?:[0-9]+)?\.?[0-9]+(?:in|mm|cm|pt|em|ex|pc|bp|dd|cc|sp)$/;
+  paramValidate[p] = /^(?:\d+(?:\.\d+)?|\.\d+)(?:in|mm|cm|pt|em|ex|pc|bp|dd|cc|sp)$/;
 });
 
 var paramScriptMap = {

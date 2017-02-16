@@ -24,7 +24,7 @@ body
   color #660000
 
 h1
-  margin-bottom 1.5em
+  margin-bottom 1em
   font-weight bold
   font-size 120%
 
@@ -37,11 +37,12 @@ b
 code
   font-family monospace
 
-input[type='checkbox']
+input[type='checkbox'], input[type='radio']
   vertical-align middle
-  margin-right 1ex
 
 label
+  margin 0
+  padding 0
   vertical-align middle
 
 textarea
@@ -51,6 +52,9 @@ textarea
 .clearfix
   clear both
 
+.hidden
+  visibility hidden
+
 .left
   float left
 
@@ -58,6 +62,8 @@ textarea
   float right
 
 .tooltip
+  position relative
+  top 1px
   margin-left 5px
   &:hover
     cursor pointer
@@ -75,30 +81,43 @@ textarea
     margin-right 1.5em
   li
     margin-bottom .2em
-  label
-    margin-right 0.5ex
-  label.wide
-    width 14em
-  input[type='radio']
-    margin-right 1ex
-  button
-    margin-bottom 1em
-  .checkbox
+  li.checkbox
     margin-top 1ex
     margin-bottom 1ex
+  label
+    margin-right 0.5ex
+    span
+      vertical-align middle
+  label.wide
+    width 12em
+  button
+    margin-bottom 1em
+
+#space, #direction
+  text-align right
+  width 18em
+  input[type='checkbox'], input[type='radio']
+    margin 0 0 0 1.25ex
+
+#style, #font
+  width 10em
+  input[type='checkbox'], input[type='radio']
+    margin 0 1.25ex 0 0
 
 #space
-  margin-bottom 1.5em
+  margin-bottom 1em
+  .heading
+    text-align right
   label
     display inline-block
     text-align right
     margin-right 1ex
 
-#style
-  max-width 9em
-
 #font
   max-width 11em
+
+#fontopt ul
+  margin-bottom 1.25ex
 
 #fontopt div
   margin-top 1ex
@@ -113,7 +132,7 @@ textarea
   margin-bottom 1em
 
 #buttons
-  margin-top 0.75em
+  //margin-top 0.25ex
   button
     margin 0 1em
 

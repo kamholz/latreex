@@ -103,10 +103,12 @@ block body
   form#form(method='post',action='/')
 
     .left
-      .rowform#space
+      .rowform.left#space
         ul
+          li.heading Spacing:
+            span.tooltip.ui-icon.ui-icon-info(data-content='Possible units are <em>ex</em> (height of “x” in current font), <em>em</em> (width of “M” in current font), <em>pt</em> (points), <em>cm</em> (centimeters), <em>mm</em> (millimeters), <em>in</em> (inches).')
           li
-            label.wide Space between sibling nodes:
+            label.wide Between sibling nodes:
             input(type='text',name='treesep',value='4ex',size=6,maxlength=6,tabindex=1)
             span.tooltip.ui-icon.ui-icon-info(data-content='Space between child nodes of the same parent, e.g., <em>Baltic</em> and <em>Slavic</em>')
           li
@@ -114,7 +116,7 @@ block body
             input(type='text',name='levelsep',value='2cm',size=6,maxlength=6,tabindex=2)
             span.tooltip.ui-icon.ui-icon-info(data-content='Length between parent and child nodes, e.g., <em>Balto-Slavic</em> and <em>Baltic</em>')
           li
-            label.wide Maximum node label width:
+            label.wide Max node label width:
             input(type='text',name='LFTwidth',value='15ex',size=6,maxlength=6,tabindex=3)
             span.tooltip.ui-icon.ui-icon-info(data-content='Maximum width of node labels (language or family names) before wrapping to another line (can be overridden for an individual label by appending ~ to it)')
           li
@@ -130,32 +132,33 @@ block body
         ul
           li Style:
             span.tooltip.ui-icon.ui-icon-info(data-content='In non-flat trees, parent and child nodes are always the same distance apart. In flat trees, leaf nodes (nodes with no children) are all displayed parallel to each other. Flat style is generally only practical for smaller trees.<br><br><b>Center labels</b> will vertically center labels on the same level in a vertical tree. It can be useful if you have multiline labels.')
-          li
-            input#style_nonflat(type='radio',name='style',value='nonflat',checked='checked',tabindex=6)
-            label(for='style_nonflat') Non-flat
-          li
-            input#style_flat(type='radio',name='style',value='flat',tabindex=7)
-            label(for='style_flat') Flat
-          li.checkbox
-            input#centerlabels(type='checkbox',name='centerlabels',value='1',tabindex=13)
-            label(for='centerlabels') Center labels
+          li: label
+            input(type='radio',name='style',value='nonflat',checked='checked',tabindex=6)
+            span Non-flat
+          li: label
+            input(type='radio',name='style',value='flat',tabindex=7)
+            span Flat
+          li.checkbox: label
+            input(type='checkbox',name='centerlabels',value='1',tabindex=13)
+            span Center labels
 
-
-      .rowform.left
+      .clearfix
+      .rowform.left#direction
         ul
           li Direction:
-          li
-            input#orient_D(type='radio',name='orient',value='D',checked='checked',tabindex=8)
-            label(for='orient_D') Top to bottom
-          li
-            input#orient_R(type='radio',name='orient',value='R',tabindex=9)
-            label(for='orient_R') Left to right
-          li
-            input#orient_L(type='radio',name='orient',value='L',tabindex=10)
-            label(for='orient_L') Right to left
-          li
-            input#orient_U(type='radio',name='orient',value='U',tabindex=11)
-            label(for='orient_U') Bottom to top
+            span.tooltip.ui-icon.ui-icon-info.hidden
+          li: label
+            span Top to bottom
+            input(type='radio',name='orient',value='D',checked='checked',tabindex=8)
+          li: label
+            span Left to right
+            input(type='radio',name='orient',value='R',tabindex=9)
+          li: label
+            span Right to left
+            input(type='radio',name='orient',value='L',tabindex=10)
+          li: label
+            span Bottom to top
+            input(type='radio',name='orient',value='U',tabindex=11)
 
       .rowform.left#font
         ul
@@ -196,9 +199,9 @@ block body
         #fontopt
           ul
             #ligatures
-              li.checkbox
-                input#ligatures_input(type='checkbox',name='ligatures',value='1',tabindex=13)
-                label(for='ligatures_input') Extra Ligatures
+              li.checkbox: label
+                input(type='checkbox',name='ligatures',value='1',tabindex=13)
+                span Extra Ligatures
             #arabic
               li Arabic:
               li

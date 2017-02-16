@@ -8,6 +8,7 @@ var ejs = require('ejs');
 var emojiRegex = require('emoji-regex')();
 var execFile = require('child_process').execFile;
 var fs = require('fs');
+var request = require('request');
 var uuid = require('uuid');
 
 var config = require('./config');
@@ -15,6 +16,7 @@ var fontMap = require('./lib/font');
 var fontspecScriptMap = require('./lib/fontspec_script');
 var latexTemplate = fs.readFileSync(__dirname + '/lib/latex.ejs', 'utf8');
 var notoFontMap = require('./lib/noto');
+var roman = require('./lib/roman');
 var script = require('./lib/script');
 
 var rtlScript = {};
@@ -108,6 +110,7 @@ app.post('/png', makeLatex, makeFile('png'), returnInfo);
 app.get('/tex/:id/:name', getFile('tex','text/plain'));
 app.get('/pdf/:id/:name', getFile('pdf','application/pdf'));
 app.get('/png/:id', getFile('png','image/png'));
+app.get('/multitree/:id', multitree);
 
 var proxyApp;
 
@@ -165,6 +168,52 @@ function makeLatex(req, res, next) {
 
 function returnInfo(req, res, next) {
   res.json({ id: req.file, name: req.treeName });
+}
+
+function multitree(req, res, next) {
+  if (!req.params.id.match(/^\d+$/)) return res.sendStatus(409);
+
+  request({
+    url: 'http://new.multitree.org/static/data/trees/json/'+req.params.id+'.json',
+    json: true,
+    gzip: true,
+  }, function (err, multitreeRes, data) {
+    if (err) return res.sendStatus(409);
+
+    res.contentType('text/plain');
+
+    try {
+      var tree = extractMultitree(data);
+      res.send(tree);
+    } catch (e) {
+      if (e === 'ELIMIT') res.send(e);
+      else res.sendStatus(409);
+    }
+
+  });
+}
+
+function extractMultitree(data) {
+  var output = '';
+  var lines = 0;
+
+  _extract(data, 0);
+
+  return output;
+
+  function _extract(data, level) {
+    for (var i = level; i > 0; i--) output += '-';
+    output += data.name + '\n';
+    lines++;
+
+    if (lines > 1000) throw 'ELIMIT';
+
+    if (data.children) {
+      data.children.forEach(function (child) {
+        _extract(child, level+1);
+      });
+    }
+  }
 }
 
 function makeFile(ext) {
@@ -336,16 +385,4 @@ function getTreeName(txt) {
   if (txt === '') txt = 'tree-unnamed';
 
   return txt;
-}
-
-var D = [1,5,10,50,100,500,1000];
-var R = ['I','V','X','L','C','D','M'];
-
-function roman(dec) {
-  var r = '', d = dec;
-  for (var i = 6; i >= 0; i--) {
-  while (d >= D[i]) {d -= D[i]; r += R[i];}
-    if (i > 0 && d >= D[i]-D[i-2+i%2]) {d -= D[i]-D[i-2+i%2]; r += R[i-2+i%2]+R[i];}
-  }
-  return r;
 }

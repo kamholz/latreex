@@ -20,6 +20,7 @@ append js
       var copyarea = $('#copyarea');
       var form = $('#form');
       var previewimage = $('#previewimage');
+      var tree = $('#tree');
 
       $('#fontoptToggle a').click(function () {
         var elt = $(this);
@@ -32,9 +33,13 @@ append js
       });
 
       $('#preview').click(function () {
-        previewimage.html('Loading preview...');
-        $.post(basepath+'png', form.serializeArray(), function (data) {
-          previewimage.html($('<img>').attr('src', basepath+'png/'+data.id));
+        display('Loading preview...');
+        $.post(basepath+'png', form.serializeArray())
+        .done(function (data) {
+          display($('<img>').attr('src', basepath+'png/'+data.id));
+        })
+        .fail(function () {
+          display('Failed to load preview');
         });
       });
 
@@ -59,9 +64,9 @@ append js
             }
           }
 
-          previewimage.html('tree loaded successfully');
+          display('Tree loaded successfully');
         } catch (e) {
-          previewimage.html('invalid tree, could not load');
+          display('Invalid tree, could not load');
         }
       });
 
@@ -81,18 +86,49 @@ append js
 
         try {
           document.execCommand('copy');
-          previewimage.html('tree copied to clipboard');
+          display('Tree copied to clipboard');
         } catch (e) {
-          previewimage.html('could not copy tree to clipboard');        
+          display('Could not copy tree to clipboard');        
         }
       });
-    });
 
-    function downloadFile(ext) {
-      $.post(basepath+ext, form.serializeArray(), function (data) {
-        window.location.pathname = basepath+ext+'/'+data.id+'/'+data.name+'.'+ext;
+      $('#multitree').click(function () {
+        var id = prompt("Enter numeric ID from new.multitree.org:");
+        if (id === null) return;
+        id = id.trim();
+
+        if (!id.match(/^\d+$/)) {
+          display('Invalid MultiTree ID (should be numeric)');
+          return;
+        }
+
+        $.get(basepath+'multitree/'+id)
+        .done(function (data) {
+          if (data === 'ELIMIT') display('MultiTree could not be loaded: tree too big');
+          else {
+            tree.val(data);
+            display('MultiTree loaded successfully');          
+          }
+        })
+        .fail(function () {
+          display('MultiTree could not be loaded');
+        });
       });
-    }
+
+      function downloadFile(ext) {
+        $.post(basepath+ext, form.serializeArray())
+        .done(function (data) {
+          window.location.pathname = basepath+ext+'/'+data.id+'/'+data.name+'.'+ext;
+        })
+        .fail(function () {
+          previewimage.html('Download failed');
+        });
+      }
+
+      function display(txt) {
+        previewimage.html(txt);
+      }
+    });
 
 block body
   .right
@@ -260,7 +296,7 @@ block body
     .left
       p Enter tree:
         span.tooltip.ui-icon.ui-icon-info(data-content='Enter one node (e.g., language or family name) per line. The first line contains the root node; subsequent lines contain child nodes. Embedding is indicated with the appropriate number of dashes/hyphens (-). For an unlabeled node, use a dot (.).<br><br>To force a label not to wrap across lines, append ~. To push a node up on a flat-style tree, append one ^ for each level (after ~, if present).<br><br>Some LaTeX formatting commands are available. To style text, use one of the following: <code>\\textbf</code> (bold), <code>\\textit</code> (italic), <code>\\textrm</code> (plain), <code>\\textsc</code> (small caps), <code>\\textsubscript</code>, <code>\\textsuperscript</code>, <code>\\underline</code>. These take a single argument in curly braces: <code>\\textbf{sample}</code> produces <b>sample</b>.<br><br>To insert a linebreak, use <code>\\newline{}</code>. To change the font size, use one of the following (from smallest to largest): <code>\\tiny{}</code>, <code>\\scriptsize{}</code>, <code>\\footnotesize{}</code>, <code>\\small{}</code> (the default), <code>\\normalsize{}</code>, <code>\\large{}</code>, <code>\\Large{}</code>, <code>\\LARGE{}</code>, <code>\\huge{}</code>, <code>\\HUGE{}</code>.')
-      textarea(name='tree',rows=18,cols=40,tabindex=20)
+      textarea#tree(name='tree',rows=18,cols=40,tabindex=20)
         | Proto-Indo-European~
         | -Balto-Slavic~
         | --Baltic
@@ -286,6 +322,7 @@ block body
     button#pdf(tabindex=23) Download PDF
     button#copytree(tabindex=24) Copy Tree
     button#pastetree(tabindex=25) Paste Tree
+    button#multitree(tabindex=26) Load MultiTree
 
   #previewimage
 

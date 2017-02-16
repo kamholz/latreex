@@ -188,7 +188,10 @@ function multitree(req, res, next) {
         ? findMultitreeNode(data, req.params.nodeName)
         : data;
 
-      if (tree) res.send(multitreeToLatreex(tree, req.query.dialect));
+      if (tree) {
+        var dialect = req.query.dialect === '1' ? true : false;
+        res.send(multitreeToLatreex(tree, dialect));
+      }
       else res.sendStatus(409);
     } catch (e) {
       if (e === 'ELIMIT') res.send(e);

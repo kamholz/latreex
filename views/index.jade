@@ -142,13 +142,14 @@ append js
         $.get({ url: url, data: { dialect: dialect } })
         .done(function (data) {
           if (data === 'ELIMIT') display('MultiTree could not be loaded: tree too big');
+          else if (data === 'ENOENT') display('MultiTree could not be loaded: subgroup not found');
           else {
             tree.val(data);
             display('MultiTree loaded successfully');          
           }
         })
         .fail(function () {
-          display('MultiTree could not be loaded: server error');
+          display('MultiTree could not be loaded: tree not found or server error');
         });
       }
 

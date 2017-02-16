@@ -192,7 +192,7 @@ function multitree(req, res, next) {
         var dialect = req.query.dialect === '1' ? true : false;
         res.send(multitreeToLatreex(tree, dialect));
       }
-      else res.sendStatus(409);
+      else res.send('ENOENT');
     } catch (e) {
       if (e === 'ELIMIT') res.send(e);
       else res.sendStatus(409);

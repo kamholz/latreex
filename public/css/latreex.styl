@@ -53,6 +53,10 @@ textarea
 .clearfix
   clear both
 
+.dialog
+  display none
+  font-size 85%
+
 .hidden
   visibility hidden
 
@@ -138,6 +142,25 @@ textarea
   text-align center
   img
     max-width 100%
+
+#pastetreeDialog
+  textarea
+    font-family monospace
+    font-size 85%
+    width 95%
+
+#multitreeDialog
+  label
+    display block
+    margin 1ex 0
+    span
+      display inline-block
+      text-align right
+      width 11em
+  input
+    margin 0 1ex
+  .error
+    color red
 
 #copyarea
   position fixed

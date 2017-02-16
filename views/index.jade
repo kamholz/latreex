@@ -19,6 +19,8 @@ append js
 
       var copyarea = $('#copyarea');
       var form = $('#form');
+      var multitreeDialog = $('#multitreeDialog');
+      var pastetreeDialog = $('#pastetreeDialog');
       var previewimage = $('#previewimage');
       var tree = $('#tree');
 
@@ -46,30 +48,6 @@ append js
       $('#latex').click(function () { downloadFile('tex') });
       $('#pdf').click(function () { downloadFile('pdf') });
 
-      $('#pastetree').click(function () {
-        var json = prompt("Paste the tree info here:");
-        if (json === null) return;
-
-        try {
-          json = $.parseJSON(json.trim().replace(/^%\s*/,''));
-
-          for (var i in json) {
-            var elt = form.find('[name='+i+']');
-
-            if (!elt.length) throw 'not found';
-            else if (elt.length > 1) elt.val([json[i]]);
-            else {
-              if (elt.is('input[type="checkbox"]')) elt.prop('checked', json[i] ? true : false);
-              else elt.val(json[i]);
-            }
-          }
-
-          display('Tree loaded successfully');
-        } catch (e) {
-          display('Invalid tree, could not load');
-        }
-      });
-
       $('#copytree').click(function () {
         var p = {};
 
@@ -77,7 +55,7 @@ append js
           p[field.name] = field.value;
         });
 
-        form.find('input[type="checkbox"]').each(function () {
+        form.find('input[type=checkbox]').each(function () {
           if (!this.checked) p[this.name] = 0;
         });
 
@@ -92,18 +70,75 @@ append js
         }
       });
 
-      $('#multitree').click(function () {
-        var id = prompt("Enter ID from new.multitree.org, optionally followed by / and subgroup name (example: 19655/Anatolian):");
-        if (id === null) return;
-        id = id.trim();
+     pastetreeDialog.dialog({
+        autoOpen:   false,
+        buttons:    { 'Load Tree': pasteTree },
+        draggable:  false,
+        hide:       { effect: 'fade', duration: 200 },
+        modal:      true,
+        resizable:  false,
+        show:       { effect: 'fade', duration: 200 },
+        title:      'Paste Tree',
+        width:      400
+      });
 
-        if (!id.match(/^\d+(?:\/.+?)?$/)) {
-          display('Invalid MultiTree speficiation');
+      function pasteTree() {
+        pastetreeDialog.dialog('close');
+        var json = pastetreeDialog.find('textarea').val();
+
+        try {
+          json = $.parseJSON(json.trim().replace(/^%\s*/,''));
+
+          for (var i in json) {
+            var elt = form.find('[name='+i+']');
+
+            if (!elt.length) throw 'not found';
+            else if (elt.length > 1) elt.val([json[i]]);
+            else {
+              if (elt.is('input[type=checkbox]')) elt.prop('checked', json[i] ? true : false);
+              else elt.val(json[i]);
+            }
+          }
+
+          display('Tree loaded successfully');
+        } catch (e) {
+          display('Invalid tree, could not load');
+        }          
+      }
+
+      $('#pastetree').click(function () {
+        pastetreeDialog.find('textarea').val('');
+        pastetreeDialog.dialog('open');
+      });
+
+      multitreeDialog.dialog({
+        autoOpen:   false,
+        buttons:    { 'Load Tree': multiTree },
+        draggable:  false,
+        hide:       { effect: 'fade', duration: 200 },
+        modal:      true,
+        resizable:  false,
+        show:       { effect: 'fade', duration: 200 },
+        title:      'Load MultiTree',
+        width:      400
+      });
+
+      function multiTree() {
+        var id = multitreeDialog.find('input[name=id]').val().trim();
+        var subgroup = multitreeDialog.find('input[name=subgroup]').val().trim();
+
+        if (!id.match(/^\d+$/)) {
+          multitreeDialog.find('.error').html('Missing or invalid MultiTree ID (must be numeric)');
           return;
         }
 
+        multitreeDialog.dialog('close');
+
+        var url = basepath+'multitree/'+id;
+        if (subgroup.length) url += '/'+subgroup;
+
         display('');
-        $.get(basepath+'multitree/'+id)
+        $.get(url)
         .done(function (data) {
           if (data === 'ELIMIT') display('MultiTree could not be loaded: tree too big');
           else {
@@ -112,8 +147,13 @@ append js
           }
         })
         .fail(function () {
-          display('MultiTree could not be loaded');
+          display('MultiTree could not be loaded: server error');
         });
+      }
+
+      $('#multitree').click(function () {
+        multitreeDialog.find('input').val('');
+        multitreeDialog.dialog('open');
       });
 
       function downloadFile(ext) {
@@ -214,7 +254,7 @@ block body
               option(value='helvetica') Helvetica
               option(value='junicode') Junicode
               option(value='noto_mono') Noto Mono
-              option(value='noto_sans', selected='selected') Noto Sans
+              option(value='noto_sans', selected) Noto Sans
               option(value='noto_serif') Noto Serif
               option(value='palatino') Palatino
               option(value='times') Times
@@ -243,7 +283,7 @@ block body
               li
                 select(name='arabic',tabindex=15)
                   option(value='noop') (no override)
-                  option(value='amiri', selected='selected') Amiri
+                  option(value='amiri', selected) Amiri
                   option(value='arefruqaa') Aref Ruqaa
                   option(value='hussaini_nastaleeq') Hussaini Nastaleeq
                   option(value='noto_kufi') Noto Kufi Arabic
@@ -258,14 +298,14 @@ block body
                   option(value='babelstone') BabelStone Han
                   option(value='noto_jp') Noto Sans CJK JP
                   option(value='noto_kr') Noto Sans CJK KR
-                  option(value='noto_sc', selected='selected') Noto Sans CJK SC
+                  option(value='noto_sc', selected) Noto Sans CJK SC
                   option(value='noto_tc') Noto Sans CJK TC
                   option(value='stkaiti') STKaiti
             #greek
               li Greek:
               li
                 select(name='greek',tabindex=17)
-                  option(value='noop', selected='selected') (no override)
+                  option(value='noop', selected) (no override)
                   option(value='alfios') Alfios
                   option(value='didot') GFS Didot Classic
                   option(value='neohellenic') GFS NeoHellenic
@@ -284,14 +324,14 @@ block body
                   option(value='ezra') Ezra SIL
                   option(value='mekorot_rashi') Mekorot Rashi
                   option(value='mekorot_vilna') Mekorot Vilna
-                  option(value='noto_hebrew', selected='selected') Noto Sans Hebrew
+                  option(value='noto_hebrew', selected) Noto Sans Hebrew
             #syriac
               li Syriac:
               li
                 select(name='syriac',tabindex=19)
                   option(value='noop') (no override)
                   option(value='syriac_eastern') Noto Sans Syriac Eastern
-                  option(value='syriac_estrangela', selected='selected') Noto Sans Syriac Estrangela
+                  option(value='syriac_estrangela', selected) Noto Sans Syriac Estrangela
                   option(value='syriac_western') Noto Sans Syriac Western
 
     .left
@@ -326,5 +366,22 @@ block body
     button#multitree(tabindex=26) Load MultiTree
 
   #previewimage
+
+  #pastetreeDialog.dialog
+    label
+      | Enter tree data (from Copy Tree or LaTeX source):
+      textarea(autofocus,rows=5)
+
+  #multitreeDialog.dialog
+    label
+      span
+        a(href='http://new.multitree.org') MultiTree
+        |  numeric ID:
+      input(type='text',name='id',inputmode='numeric',size=5,maxlength=5,autofocus,placeholder='19655')
+      | *
+    label
+      span Subgroup name:
+      input(type='text',name='subgroup',size=20,placeholder='Anatolian')
+    .error
 
   textarea#copyarea

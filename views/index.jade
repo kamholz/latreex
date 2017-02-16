@@ -22,20 +22,19 @@ append js
       var previewimage = $('#previewimage');
 
       $('#fontoptToggle a').click(function () {
-        var el = $(this);
-        var target = $('#' + el.data('div'));
+        var elt = $(this);
+        var target = $('#' + elt.data('div'));
 
         target.toggle();
 
-        if (target.css('display') === 'none') el.css('font-weight', 'normal');
-        else el.css('font-weight', 'bold');
+        if (target.css('display') === 'none') elt.css('font-weight', 'normal');
+        else elt.css('font-weight', 'bold');
       });
 
       $('#preview').click(function () {
         previewimage.html('Loading preview...');
-        $.post(basepath+'png', $('#form').serializeArray(), function (data) {
-          previewimage.html('');
-          previewimage.append($("<img />").attr('src', basepath+'png/'+data.id));
+        $.post(basepath+'png', form.serializeArray(), function (data) {
+          previewimage.html($('<img>').attr('src', basepath+'png/'+data.id));
         });
       });
 
@@ -90,7 +89,7 @@ append js
     });
 
     function downloadFile(ext) {
-      $.post(basepath+ext, $('#form').serializeArray(), function (data) {
+      $.post(basepath+ext, form.serializeArray(), function (data) {
         window.location.pathname = basepath+ext+'/'+data.id+'/'+data.name+'.'+ext;
       });
     }
@@ -139,7 +138,7 @@ block body
             input(type='radio',name='style',value='flat',tabindex=7)
             span Flat
           li.checkbox: label
-            input(type='checkbox',name='centerlabels',value='1',tabindex=13)
+            input(type='checkbox',name='centerlabels',value='1',tabindex=8)
             span Center labels
 
       .clearfix
@@ -149,23 +148,23 @@ block body
             span.tooltip.ui-icon.ui-icon-info.hidden
           li: label
             span Top to bottom
-            input(type='radio',name='orient',value='D',checked='checked',tabindex=8)
+            input(type='radio',name='orient',value='D',checked='checked',tabindex=9)
           li: label
             span Left to right
-            input(type='radio',name='orient',value='R',tabindex=9)
+            input(type='radio',name='orient',value='R',tabindex=10)
           li: label
             span Right to left
-            input(type='radio',name='orient',value='L',tabindex=10)
+            input(type='radio',name='orient',value='L',tabindex=11)
           li: label
             span Bottom to top
-            input(type='radio',name='orient',value='U',tabindex=11)
+            input(type='radio',name='orient',value='U',tabindex=12)
 
       .rowform.left#font
         ul
           li Font:
             span.tooltip.ui-icon.ui-icon-info(data-content='The main dropdown lets you choose your main font. To show additional options, click the highlighted sections below. The ligatures section lets you turn on extra (“Rare”) ligatures. The other sections let you override the font for particular scripts. Note that if you hide a section, your choice will still be remembered.')
           li
-            select#fontselect(name='font',tabindex=12)
+            select#fontselect(name='font',tabindex=13)
               option(value='arial') Arial
               option(value='bookman') Bookman
               option(value='schoolbook') Century Schoolbook
@@ -200,12 +199,12 @@ block body
           ul
             #ligatures
               li.checkbox: label
-                input(type='checkbox',name='ligatures',value='1',tabindex=13)
+                input(type='checkbox',name='ligatures',value='1',tabindex=14)
                 span Extra Ligatures
             #arabic
               li Arabic:
               li
-                select(name='arabic',tabindex=14)
+                select(name='arabic',tabindex=15)
                   option(value='noop') (no override)
                   option(value='amiri', selected='selected') Amiri
                   option(value='arefruqaa') Aref Ruqaa
@@ -216,7 +215,7 @@ block body
             #cjk
               li CJK:
               li
-                select(name='cjk',tabindex=15)
+                select(name='cjk',tabindex=16)
                   option(value='noop') (no override)
                   option(value='adobe_kaiti') Adobe Kaiti Std
                   option(value='babelstone') BabelStone Han
@@ -228,7 +227,7 @@ block body
             #greek
               li Greek:
               li
-                select(name='greek',tabindex=16)
+                select(name='greek',tabindex=17)
                   option(value='noop', selected='selected') (no override)
                   option(value='alfios') Alfios
                   option(value='didot') GFS Didot Classic
@@ -241,7 +240,7 @@ block body
             #hebrew
               li Hebrew:
               li
-                select(name='hebrew',tabindex=17)
+                select(name='hebrew',tabindex=18)
                   option(value='noop') (no override)
                   option(value='cardo') Cardo
                   option(value='david') David CLM
@@ -252,7 +251,7 @@ block body
             #syriac
               li Syriac:
               li
-                select(name='syriac',tabindex=18)
+                select(name='syriac',tabindex=19)
                   option(value='noop') (no override)
                   option(value='syriac_eastern') Noto Sans Syriac Eastern
                   option(value='syriac_estrangela', selected='selected') Noto Sans Syriac Estrangela

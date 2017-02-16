@@ -111,6 +111,7 @@ app.get('/tex/:id/:name', getFile('tex','text/plain'));
 app.get('/pdf/:id/:name', getFile('pdf','application/pdf'));
 app.get('/png/:id', getFile('png','image/png'));
 app.get('/multitree/:id', multitree);
+app.get('/multitree/:id/:nodeName', multitree);
 
 var proxyApp;
 
@@ -183,8 +184,12 @@ function multitree(req, res, next) {
     res.contentType('text/plain');
 
     try {
-      var tree = extractMultitree(data);
-      res.send(tree);
+      var tree = req.params.nodeName
+        ? findMultitreeNode(data, req.params.nodeName)
+        : data;
+
+      if (tree) res.send(multitreeToLatreex(tree));
+      else res.sendStatus(409);
     } catch (e) {
       if (e === 'ELIMIT') res.send(e);
       else res.sendStatus(409);
@@ -193,7 +198,25 @@ function multitree(req, res, next) {
   });
 }
 
-function extractMultitree(data) {
+function findMultitreeNode(data, nodeName) {
+  var queue = [data];
+  nodeName = nodeName.toLowerCase();
+
+  while (queue.length) {
+    var node = queue.shift();
+    if (node.name.toLowerCase() === nodeName) return node;
+
+    if (node.children) {
+      node.children.forEach(function (child) {
+        queue.push(child);
+      });
+    }
+  }
+
+  return null;
+}
+
+function multitreeToLatreex(data) {
   var output = '';
   var lines = 0;
 

@@ -93,15 +93,16 @@ append js
       });
 
       $('#multitree').click(function () {
-        var id = prompt("Enter numeric ID from new.multitree.org:");
+        var id = prompt("Enter ID from new.multitree.org, optionally followed by / and subgroup name (example: 19655/Anatolian):");
         if (id === null) return;
         id = id.trim();
 
-        if (!id.match(/^\d+$/)) {
-          display('Invalid MultiTree ID (should be numeric)');
+        if (!id.match(/^\d+(?:\/.+?)?$/)) {
+          display('Invalid MultiTree speficiation');
           return;
         }
 
+        display('');
         $.get(basepath+'multitree/'+id)
         .done(function (data) {
           if (data === 'ELIMIT') display('MultiTree could not be loaded: tree too big');

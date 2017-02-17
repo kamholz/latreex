@@ -242,7 +242,7 @@ block body
       .rowform.left#font
         ul
           li Font:
-            span.tooltip.ui-icon.ui-icon-info(data-content='The main dropdown lets you choose your main font. To show additional options, click the highlighted sections below. The ligatures section lets you turn on extra (“Rare”) ligatures. The other sections let you override the font for particular scripts. Note that if you hide a section, your choice will still be remembered.')
+            span.tooltip.ui-icon.ui-icon-info(data-content='The main dropdown lets you choose your main font. To show additional options, click the highlighted sections below. The ligatures section lets you turn on extra ligatures. The other sections let you override the font for particular scripts. Note that if you hide a section, your choice will still be remembered.')
           li
             select#fontselect(name='font',tabindex=13)
               option(value='arial') Arial
@@ -278,13 +278,18 @@ block body
         #fontopt
           ul
             #ligatures
-              li.checkbox: label
-                input(type='checkbox',name='ligatures',value='1',tabindex=14)
-                span Extra Ligatures
+              li Ligatures:
+              li.checkbox
+                label
+                  input(type='checkbox',name='ligatures_rare',value='1',tabindex=14)
+                  span Rare
+                label
+                  input(type='checkbox',name='ligatures_hist',value='1',tabindex=15)
+                  span Historic
             #arabic
               li Arabic:
               li
-                select(name='arabic',tabindex=15)
+                select(name='arabic',tabindex=16)
                   option(value='noop') (no override)
                   option(value='amiri', selected) Amiri
                   option(value='arefruqaa') Aref Ruqaa
@@ -295,7 +300,7 @@ block body
             #cjk
               li CJK:
               li
-                select(name='cjk',tabindex=16)
+                select(name='cjk',tabindex=17)
                   option(value='noop') (no override)
                   option(value='adobe_kaiti') Adobe Kaiti Std
                   option(value='babelstone') BabelStone Han
@@ -307,7 +312,7 @@ block body
             #greek
               li Greek:
               li
-                select(name='greek',tabindex=17)
+                select(name='greek',tabindex=18)
                   option(value='noop', selected) (no override)
                   option(value='alfios') Alfios
                   option(value='didot') GFS Didot Classic
@@ -320,7 +325,7 @@ block body
             #hebrew
               li Hebrew:
               li
-                select(name='hebrew',tabindex=18)
+                select(name='hebrew',tabindex=19)
                   option(value='noop') (no override)
                   option(value='cardo') Cardo
                   option(value='david') David CLM
@@ -331,7 +336,7 @@ block body
             #syriac
               li Syriac:
               li
-                select(name='syriac',tabindex=19)
+                select(name='syriac',tabindex=20)
                   option(value='noop') (no override)
                   option(value='syriac_eastern') Noto Sans Syriac Eastern
                   option(value='syriac_estrangela', selected) Noto Sans Syriac Estrangela
@@ -340,7 +345,7 @@ block body
     .left
       p Enter tree:
         span.tooltip.ui-icon.ui-icon-info(data-content='Enter one node (e.g., language or family name) per line. The first line contains the root node; subsequent lines contain child nodes. Embedding is indicated with the appropriate number of dashes/hyphens (-). For an unlabeled node, use a dot (.).<br><br>To force a label not to wrap across lines, append ~. To push a node up on a flat-style tree, append one ^ for each level (after ~, if present).<br><br>Some LaTeX formatting commands are available. To style text, use one of the following: <code>\\textbf</code> (bold), <code>\\textit</code> (italic), <code>\\textrm</code> (plain), <code>\\textsc</code> (small caps), <code>\\textsubscript</code>, <code>\\textsuperscript</code>, <code>\\underline</code>. These take a single argument in curly braces: <code>\\textbf{sample}</code> produces <b>sample</b>.<br><br>To insert a linebreak, use <code>\\newline{}</code>. To change the font size, use one of the following (from smallest to largest): <code>\\tiny{}</code>, <code>\\scriptsize{}</code>, <code>\\footnotesize{}</code>, <code>\\small{}</code> (the default), <code>\\normalsize{}</code>, <code>\\large{}</code>, <code>\\Large{}</code>, <code>\\LARGE{}</code>, <code>\\huge{}</code>, <code>\\HUGE{}</code>.')
-      textarea#tree(name='tree',rows=18,cols=40,tabindex=20)
+      textarea#tree(name='tree',rows=18,cols=40,tabindex=21)
         | Proto-Indo-European~
         | -Balto-Slavic~
         | --Baltic
@@ -361,12 +366,12 @@ block body
 
   .clearfix
   #buttons
-    button#preview(tabindex=21) Preview Tree
-    button#pdf(tabindex=22) Download PDF
-    button#latex(tabindex=23) Download LaTeX source
-    button#copytree(tabindex=24) Copy Tree
-    button#pastetree(tabindex=25) Paste Tree
-    button#multitree(tabindex=26) Load MultiTree
+    button#preview(tabindex=22) Preview Tree
+    button#pdf(tabindex=23) Download PDF
+    button#latex(tabindex=24) Download LaTeX source
+    button#copytree(tabindex=25) Copy Tree
+    button#pastetree(tabindex=26) Paste Tree
+    button#multitree(tabindex=27) Load MultiTree
 
   #previewimage
 

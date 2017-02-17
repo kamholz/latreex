@@ -40,7 +40,8 @@ var paramDefaults = {
   centerlabels:   0,
   orient:         'D',
   font:           'noto_sans',
-  ligatures:      0,
+  ligatures_rare: 0,
+  ligatures_hist: 0,
   arabic:         'noto_naskh',
   cjk:            'noto_sc',
   greek:          'noop',
@@ -53,7 +54,8 @@ var paramValidate = {
   centerlabels: /^1$/,
   orient: /^[DURL]$/,
   font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
-  ligatures: /^1$/,
+  ligatures_rare: /^1$/,
+  ligatures_hist: /^1$/,
   arabic: /^(?:amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq))$/,
   cjk:    /^(?:adobe_kaiti|babelstone|noop|noto_(?:sc|tc|jp|kr)|stkaiti)$/,
   greek:  /^(?:alfios|didot|neohellenic|noop|noto_(?:sans|serif)|porson|times)$/,
@@ -155,6 +157,11 @@ function makeLatex(req, res, next) {
       });
     }
   });
+
+  p.ligatures = [];
+  if (p.ligatures_rare) p.ligatures.push('Rare');
+  if (p.ligatures_hist) p.ligatures.push('Historic');
+  p.ligatures = p.ligatures.length ? p.ligatures.join(',') : null;
 
   p.tree = p.tree.split(/\r\n/);
   p.tree.splice(1000);

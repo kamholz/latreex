@@ -111,7 +111,7 @@ app.get('/tex/:id/:name', getFile('tex','text/plain'));
 app.get('/pdf/:id/:name', getFile('pdf','application/pdf'));
 app.get('/png/:id', getFile('png','image/png'));
 app.get('/multitree/:id', multitree);
-app.get('/multitree/:id/:nodeName', multitree);
+app.get('/multitree/:id/:subgroup', multitree);
 
 var proxyApp;
 
@@ -184,8 +184,8 @@ function multitree(req, res, next) {
     res.contentType('text/plain');
 
     try {
-      var tree = req.params.nodeName
-        ? findMultitreeNode(data, req.params.nodeName)
+      var tree = req.params.subgroup !== undefined
+        ? findMultitreeNode(data, req.params.subgroup)
         : data;
 
       if (tree) {
@@ -201,13 +201,20 @@ function multitree(req, res, next) {
   });
 }
 
-function findMultitreeNode(data, nodeName) {
+function findMultitreeNode(data, subgroup) {
   var queue = [data];
-  nodeName = nodeName.toLowerCase();
+
+  var attr;
+  if (subgroup.match(/^[a-z]{4}$/)) {
+    attr = 'codes';
+  } else {
+    attr = 'name';
+    subgroup = subgroup.toLowerCase();
+  }
 
   while (queue.length) {
     var node = queue.shift();
-    if (node.name.toLowerCase() === nodeName) return node;
+    if (node[attr].toLowerCase() === subgroup) return node;
 
     if (node.children) {
       node.children.forEach(function (child) {

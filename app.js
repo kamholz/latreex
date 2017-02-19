@@ -223,11 +223,7 @@ function findMultitreeNode(data, subgroup) {
     var node = queue.shift();
     if (node[attr].toLowerCase() === subgroup) return node;
 
-    if (node.children) {
-      node.children.forEach(function (child) {
-        queue.push(child);
-      });
-    }
+    if (node.children) queue.push.apply(queue, node.children);
   }
 
   return null;

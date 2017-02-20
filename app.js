@@ -53,7 +53,7 @@ var paramValidate = {
   style:  /^(?:flat|nonflat)$/,
   centerlabels: /^1$/,
   orient: /^[DURL]$/,
-  font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
+  font:   /^(?:arial|bookman|cardo|charis|charter|cm|courier|courier_new|garamond|helvetica|junicode|noto_(?:sans|serif|mono)|palatino|schoolbook|times|times_mac)$/,
   ligatures_rare: /^1$/,
   ligatures_hist: /^1$/,
   arabic: /^(?:amiri|arefruqaa|hussaini_nastaleeq|noop|(?:noto_kufi|noto_naskh|noto_nastaliq))$/,

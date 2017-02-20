@@ -25,7 +25,7 @@ require('./lib/rtl').forEach(function (sc) {
 });
 
 var latexCommands = ['footnotesize','huge','HUGE','large','Large','LARGE','newline','normalsize','scriptsize','small','tiny'];
-var latexCommandsArg = ['textbf','textit','textrm','textsc','textsubscript','textsuperscript','underline'];
+var latexCommandsArg = ['textbf','textit','textsc','textsl','textsubscript','textsuperscript','textup','underline'];
 var latexCommandsRegex = RegExp('^(.*?)(\\\\(?:' + latexCommands.join('|') + ')\\{\\})(.*?)$');
 var latexCommandsArgRegex = RegExp('^(.*?)(\\\\(?:' + latexCommandsArg.join('|') + '))(\\{.+\\}.*)$');
 // captures: (1) text before command; (2) command (including backslash) before arg; (3) rest of string

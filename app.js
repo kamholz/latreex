@@ -124,7 +124,7 @@ if (config.basepath !== '/') {
 else proxyApp = app;
 
 config.port = config.port || 3001;
-proxyApp.listen(config.port, function () {
+proxyApp.listen(config.port, 'localhost', function () {
   console.log("Express server listening on port %d in %s mode", config.port, app.settings.env);
 });
 
